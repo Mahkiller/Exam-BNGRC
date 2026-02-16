@@ -1,0 +1,13 @@
+{
+    "name": "mon-projet/mini-template",
+    "description": "Projet MVC avec FlightPHP",
+    "type": "project",
+    "require": {
+        "mikecao/flight": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    }
+}
