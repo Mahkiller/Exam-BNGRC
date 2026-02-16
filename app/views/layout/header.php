@@ -15,7 +15,7 @@
             <a href="<?= BASE_URL ?>/dashboard" class="nav-link">Tableau de bord</a>
             <a href="<?= BASE_URL ?>/besoins" class="nav-link">Besoins</a>
             <a href="<?= BASE_URL ?>/dons" class="nav-link">Dons</a>
-            <a href="<?= BASE_URL ?>/dons/attribution" class="nav-link">Attribution</a>
+            <a href="<?= BASE_URL ?>/attribution" class="nav-link">Attribution</a>
         </nav>
     </header>
     <main class="container">

@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL', 'http://localhost/BNGRC/Exam-BNGRC/public');  // Ajoute /public
+define('BASE_URL', 'http://localhost:8000');
 define('APP_NAME', 'BNGRC - Gestion des Sinistrés');
