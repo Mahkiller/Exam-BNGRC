@@ -17,6 +17,8 @@
             <a href="<?= BASE_URL ?>/besoins" class="nav-link">Besoins</a>
             <a href="<?= BASE_URL ?>/dons" class="nav-link">Dons</a>
             <a href="<?= BASE_URL ?>/attribution" class="nav-link">Attribution</a>
+            <a href="<?= BASE_URL ?>/achats" class="nav-link">Achats</a>
+            <a href="<?= BASE_URL ?>/recap" class="nav-link">📊 Recap</a>
         </nav>
     </header>
     <main class="container">

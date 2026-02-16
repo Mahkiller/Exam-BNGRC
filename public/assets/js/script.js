@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     boutonsAttribuer.forEach(btn => {
         btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
             const besoinId = this.dataset.besoinId;
             const type = this.dataset.type;
             const maxQuantite = parseFloat(this.dataset.max);
@@ -31,25 +33,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
                 
+                // Désactiver le bouton pendant la requête
+                btn.disabled = true;
+                btn.textContent = 'Attribution...';
+                
                 // Appel AJAX
-                fetch('<?= BASE_URL ?>/dons/attribuer', {
+                fetch('<?= BASE_URL ?>/attribution/attribuer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `besoin_id=${besoinId}&quantite=${quantite}&type=${type}`
+                    body: `besoin_id=${encodeURIComponent(besoinId)}&don_id=&quantite=${encodeURIComponent(quantite)}&type=${encodeURIComponent(type)}`
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
-                        // Recharger la page pour voir les mises à jour
-                        location.reload();
+                        // Afficher message de succès et recharger
+                        showSuccess(errorSpan, 'Attribution réussie!');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
                     } else {
-                        showError(errorSpan, data.message);
+                        showError(errorSpan, data.message || 'Erreur lors de l\'attribution');
+                        btn.disabled = false;
+                        btn.textContent = 'Attribuer';
                     }
                 })
                 .catch(error => {
-                    showError(errorSpan, 'Erreur de communication');
+                    console.error('Erreur:', error);
+                    showError(errorSpan, 'Erreur de communication: ' + error.message);
+                    btn.disabled = false;
+                    btn.textContent = 'Attribuer';
                 });
             });
         });
@@ -58,14 +77,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function showError(element, message) {
         element.textContent = message;
         element.style.display = 'block';
+        element.style.color = 'red';
+        element.style.fontWeight = 'bold';
         setTimeout(() => {
             element.style.display = 'none';
-        }, 3000);
+        }, 4000);
+    }
+    
+    function showSuccess(element, message) {
+        element.textContent = message;
+        element.style.display = 'block';
+        element.style.color = 'green';
+        element.style.fontWeight = 'bold';
     }
     
     function verifierStockDisponible(type, quantite, callback) {
-        // Simulation - dans une vraie app, appel API
-        // Pour l'instant, on suppose que c'est disponible
+        // Vérification simple - on suppose que c'est disponible
+        // Dans une vraie app, appel API pour vérifier le stock
         callback(true, '');
     }
     
@@ -99,5 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+    }
+});
     }
 });

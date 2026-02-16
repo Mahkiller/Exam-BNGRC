@@ -31,11 +31,11 @@ class BesoinsController extends Controller {
             
             if ($result['success']) {
                 $_SESSION['message'] = 'Besoin ajouté avec succès';
+                $this->redirect('/besoins');
             } else {
                 $_SESSION['error'] = $result['message'];
+                $this->redirect('/besoins');
             }
-            
-            $this->redirect('besoins');
         }
     }
 }

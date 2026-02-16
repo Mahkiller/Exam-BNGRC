@@ -6,16 +6,16 @@
 
 <div class="stats-row">
     <div class="stat-card">
-        <div class="stat-value"><?= count($stats_donateurs) ?></div>
         <div class="stat-label">Types de donateurs</div>
+        <div class="stat-value">2</div>
     </div>
     <div class="stat-card">
-        <div class="stat-value"><?= $stats_donateurs['International'] ?? 0 ?></div>
         <div class="stat-label">Dons internationaux</div>
+        <div class="stat-value"><?= $stats_donateurs['International'] ?? 0 ?></div>
     </div>
     <div class="stat-card">
-        <div class="stat-value"><?= $stats_donateurs['National'] ?? 0 ?></div>
         <div class="stat-label">Dons nationaux</div>
+        <div class="stat-value"><?= $stats_donateurs['National'] ?? 0 ?></div>
     </div>
 </div>
 

@@ -62,13 +62,12 @@ class DonService {
         ];
     }
     
-    public function attribuerDon($besoin_id, $don_id, $quantite) {
-        // Ici on pourrait chercher automatiquement un don disponible
-        // Mais pour simplifier, on prend le premier don disponible du même type
-        if (!$don_id) {
+    public function attribuerDon($besoin_id, $don_id, $quantite, $type = null) {
+        // Si don_id n'est pas fourni, chercher un don disponible du même type
+        if (!$don_id && $type) {
             $donsDispo = $this->getDonsDisponibles();
             foreach ($donsDispo as $don) {
-                if ($don['type_don'] == $_POST['type'] && $don['reste_disponible'] >= $quantite) {
+                if ($don['type_don'] == $type && $don['reste_disponible'] >= $quantite) {
                     $don_id = $don['id'];
                     break;
                 }

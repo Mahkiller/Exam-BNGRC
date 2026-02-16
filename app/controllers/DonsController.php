@@ -9,11 +9,18 @@ class DonsController extends Controller {
     }
     
     public function index() {
+        $stats_raw = $this->donService->getStatsDonateurs();
+        $stats_donateurs = [];
+        
+        foreach ($stats_raw as $stat) {
+            $stats_donateurs[$stat['type_donateur']] = $stat['nombre_dons'];
+        }
+        
         $data = [
             'dons' => $this->donService->getAllDons(),
             'stock' => $this->donService->getStockGlobal(),
             'stock_detail' => $this->donService->getStockDetaille(),
-            'stats_donateurs' => $this->donService->getStatsDonateurs(),
+            'stats_donateurs' => $stats_donateurs,
             'top_donateurs' => $this->donService->getTopDonateurs()
         ];
         $this->view('dons', $data);
@@ -49,11 +56,23 @@ class DonsController extends Controller {
     }
     
     public function attribuer() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $besoin_id = $_POST['besoin_id'];
+        header('Content-Type: application/json');
+        
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+                return;
+            }
+            
+            $besoin_id = $_POST['besoin_id'] ?? null;
             $don_id = $_POST['don_id'] ?? null;
-            $quantite = $_POST['quantite'];
-            $type = $_POST['type'];
+            $quantite = $_POST['quantite'] ?? 0;
+            $type = $_POST['type'] ?? null;
+            
+            if (!$besoin_id || !$quantite || !$type) {
+                echo json_encode(['success' => false, 'message' => 'Données manquantes (besoin_id, quantite, type)']);
+                return;
+            }
             
             // Vérification stock
             $validation = $this->validationService->validerAttribution($type, $quantite);
@@ -63,10 +82,11 @@ class DonsController extends Controller {
                 return;
             }
             
-            $result = $this->donService->attribuerDon($besoin_id, $don_id, $quantite);
-            
-            header('Content-Type: application/json');
+            // Appeler le service avec le type
+            $result = $this->donService->attribuerDon($besoin_id, $don_id, $quantite, $type);
             echo json_encode($result);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
         }
     }
 }

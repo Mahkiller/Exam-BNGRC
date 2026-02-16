@@ -42,4 +42,18 @@ class ServiceContainer {
         }
         return self::$instances['don'];
     }
+    
+    public static function getAchatService() {
+        if (!isset(self::$instances['achat'])) {
+            $achatModel = new AchatModel();
+            $donModel = new DonModel();
+            $besoinModel = new BesoinModel();
+            self::$instances['achat'] = new AchatService(
+                $achatModel,
+                $donModel,
+                $besoinModel
+            );
+        }
+        return self::$instances['achat'];
+    }
 }
