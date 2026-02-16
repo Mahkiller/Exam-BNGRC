@@ -1,5 +1,5 @@
 Ligne 1 | Catégorie : Web | Module : Backoffice
-Nom page / fichier : `app/controllers/categories.php`
+Nom page / fichier : `app/controllers/CategoriesController.php`
 Description : Gestion des catégories de dons : ajout / modif / suppression
 Type : Function / Base
 Estimation : 2h
@@ -35,7 +35,7 @@ Status : À faire
 Priorité : Moyenne
 
 Ligne 4 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/views/home.php`
+Nom page / fichier : `public/home.php`
 Description : Page d’accueil (point d’entrée — pas de page de login)
 Type : Affichage
 Estimation : 1h
@@ -47,7 +47,7 @@ Status : À faire
 Priorité : Moyenne
 
 Ligne 5 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/mes_besoins.php`
+Nom page / fichier : `app/controllers/MesBesoinsController.php`
 Description : Ajouter / modifier / supprimer les besoins des sinistrés par ville
 Type : Affichage / Function / Base
 Estimation : 2h
@@ -59,7 +59,7 @@ Status : À faire
 Priorité : Haute
 
 Ligne 6 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/dons.php`
+Nom page / fichier : `app/controllers/DonsController.php`
 Description : Ajouter / modifier / supprimer les dons disponibles
 Type : Affichage / Function / Base
 Estimation : 2h
@@ -71,7 +71,7 @@ Status : À faire
 Priorité : Haute
 
 Ligne 7 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/attribution_dons.php`
+Nom page / fichier : `app/controllers/AttributionDonsController.php`
 Description : Attribuer un don à un besoin spécifique avec contrôle de quantité
 Type : Function / Code integration
 Estimation : 2h
@@ -83,7 +83,7 @@ Status : À faire
 Priorité : Haute
 
 Ligne 8 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/views/dashboard.php`
+Nom page / fichier : `public/dashboard.php`
 Description : Voir toutes les villes, leurs besoins et les dons attribués
 Type : Affichage / Function
 Estimation : 2h
@@ -95,7 +95,7 @@ Status : À faire
 Priorité : Haute
 
 Ligne 9 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/historique_ville.php`
+Nom page / fichier : `app/controllers/HistoriqueVilleController.php`
 Description : Historique des distributions par ville avec date et heure
 Type : Function / Base / Affichage
 Estimation : 2h
@@ -119,7 +119,7 @@ Status : À faire
 Priorité : Moyenne
 
 Ligne 11 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/views/footer.php`
+Nom page / fichier : `public/footer.php`
 Description : Mettre nom et numéro ETU des membres du projet
 Type : Affichage
 Estimation : 0.5h
@@ -201,4 +201,3 @@ Avancement : 0%
 Qui :
 Status : À faire
 Priorité : Haute
-
