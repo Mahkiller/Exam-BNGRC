@@ -1,6 +1,6 @@
     </main>
     <footer class="footer">
-        <p>&copy; <?= date('Y') ?> BNGRC - Tous droits réservés</p>
+        <p>ETU004082-4338-4433</p>
     </footer>
     <script src="<?= BASE_URL ?>/assets/js/script.js"></script>
 </body>
