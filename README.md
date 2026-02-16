@@ -1,14 +1,7 @@
-# Exam-BNGRC
-Examen S3
-
-## Arborescence du projet
-
 
 / (Exam-BNGRC)
 ├─ app/
 │  ├─ controllers/
-│  │  ├─ admin_login.php
-│  │  ├─ admin_agents.php
 │  │  ├─ categories.php
 │  │  ├─ mes_besoins.php
 │  │  ├─ dons.php
@@ -24,7 +17,6 @@ Examen S3
 │     └─ config.php
 ├─ public/
 │  ├─ views/
-│  │  ├─ login.php
 │  │  └─ home.php
 │  └─ assets/
 │     ├─ css/
@@ -37,4 +29,4 @@ Examen S3
 ├─ to do list.md
 ├─ README.md
 └─ (autres fichiers / dossiers selon implémentation)
-
+\
