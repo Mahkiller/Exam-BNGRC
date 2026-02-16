@@ -1,20 +1,17 @@
-
-/ (Exam-BNGRC)
 / (Exam-BNGRC)
 ├─ app/
 │  ├─ controllers/
 │  │  ├─ BesoinsController.php
 │  │  ├─ DonsController.php
-│  │  ├─ DashboardController.php
-│  │  └─ AuthController.php
+│  │  └─ DashboardController.php
 │  ├─ models/
 │  │  ├── BesoinModel.php
 │  │  └── DonModel.php
-│  ├─ services/                           NOUVEAU (logique métier)
+│  ├─ services/
 │  │  ├── BesoinService.php
 │  │  ├── DonService.php
-│  │  ├── StockService.php               (vérifie les quantités)
-│  │  └── ValidationService.php           (règles de gestion)
+│  │  ├── StockService.php
+│  │  └── ValidationService.php
 │  ├─ views/
 │  │  ├── layout/
 │  │  │  ├── header.php
@@ -23,20 +20,24 @@
 │  │  ├── besoins.php
 │  │  ├── dons.php
 │  │  └── attribution.php
-│  └─ config/
-│     ├── config.php                   (connexion DB)
-│     ├── routes.php
-│     └── service.php                      AJOUTÉ (injection de services)
+│  ├─ config/
+│  │  ├── config.php
+│  │  ├── database.php
+│  │  └── service.php
+│  └─ core/
+│     ├── Router.php
+│     ├── Controller.php
+│     └── Model.php
 ├─ public/
 │  ├── index.php
-│  ├── assets/
-│  │  ├── css/
-│  │  │  └── style.css
-│  │  └── js/
-│  │     └── script.js
+│  ├── .htaccess
+│  └── assets/
+│     ├── css/
+│     │  └── style.css
+│     └── js/
+│        └── script.js
 ├─ database/
 │  └── base.sql
 ├─ .htaccess
 ├─ todo.md
 └─ README.md
-\
