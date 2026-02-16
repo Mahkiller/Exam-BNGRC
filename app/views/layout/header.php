@@ -62,14 +62,3 @@
                 <?php endif; ?>
                 
                 <!-- LE CONTENU DES PAGES SERA INSÉRÉ ICI -->
-
-        <main class="main-content">
-            <?php if (isset($_SESSION['message'])): ?>
-                <div class="alert success"><?= $_SESSION['message'] ?></div>
-                <?php unset($_SESSION['message']); ?>
-            <?php endif; ?>
-            
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert error"><?= $_SESSION['error'] ?></div>
-                <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
