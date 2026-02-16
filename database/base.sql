@@ -50,6 +50,29 @@ CREATE TABLE attribution_BNGRC (
     FOREIGN KEY (don_id) REFERENCES don_BNGRC(id)
 );
 
+-- Table des prix unitaires (catalogue)
+CREATE TABLE prix_unitaire_BNGRC (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type_article VARCHAR(50) NOT NULL, -- 'nature' ou 'materiaux'
+    description VARCHAR(255) NOT NULL,
+    unite VARCHAR(50) NOT NULL,
+    prix_unitaire DECIMAL(15,2) NOT NULL -- en Ariary
+);
+
+-- Table des achats (liée directement au don)
+CREATE TABLE achat_BNGRC (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    don_id INT NOT NULL, -- Le don en argent qui finance l'achat
+    besoin_id INT NOT NULL, -- Le besoin auquel l'achat est destiné
+    description_article VARCHAR(255) NOT NULL,
+    quantite DECIMAL(15,2) NOT NULL,
+    prix_unitaire_achat DECIMAL(15,2) NOT NULL,
+    montant_total DECIMAL(15,2) NOT NULL, -- quantite * prix_unitaire_achat
+    date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id),
+    FOREIGN KEY (besoin_id) REFERENCES besoin_BNGRC(id)
+);
+
 -- Insertion des villes (10 villes de Madagascar)
 INSERT INTO ville_BNGRC (nom_ville, region) VALUES
 ('Antananarivo', 'Analamanga'),
@@ -190,6 +213,35 @@ INSERT INTO attribution_BNGRC (besoin_id, don_id, quantite_attribuee, date_attri
 (14, 3, 800, '2026-02-16 11:30:00'),
 (15, 19, 200, '2026-02-16 13:45:00'),
 (16, 5, 3000000, '2026-02-16 15:00:00');
+
+INSERT INTO prix_unitaire_BNGRC (type_article, description, unite, prix_unitaire) VALUES
+-- Nature (aliments)
+('nature', 'Riz', 'kg', 2500),
+('nature', 'Huile végétale', 'litre', 6000),
+('nature', 'Eau potable', 'litre', 500),
+('nature', 'Sucre', 'kg', 3500),
+('nature', 'Lait en poudre', 'kg', 12000),
+('nature', 'Poisson séché', 'kg', 8000),
+('nature', 'Pommes de terre', 'kg', 2000),
+('nature', 'Fruits', 'kg', 3000),
+('nature', 'Vanille', 'kg', 50000),
+('nature', 'Biscuits', 'kg', 4000),
+('nature', 'Farine', 'kg', 2500),
+('nature', 'Sel', 'kg', 1000),
+
+-- Matériaux
+('materiaux', 'Tôles', 'plaque', 25000),
+('materiaux', 'Clous', 'kg', 5000),
+('materiaux', 'Ciment', 'sac', 28000),
+('materiaux', 'Bâches', 'piece', 15000),
+('materiaux', 'Bois', 'm3', 300000),
+('materiaux', 'Outils', 'lot', 25000),
+('materiaux', 'Poteaux électriques', 'piece', 150000),
+('materiaux', 'Sacs de jute', 'piece', 500),
+('materiaux', 'Cordes', 'rouleau', 8000),
+('materiaux', 'Vis', 'kg', 4000),
+('materiaux', 'Peinture', 'bidon', 35000),
+('materiaux', 'Ustensiles cuisine', 'lot', 15000);
 
 -- 1. Vérifier toutes les villes
 SELECT * FROM ville_BNGRC;
@@ -346,3 +398,115 @@ SELECT
     (SELECT COUNT(*) FROM attribution_BNGRC) as total_attributions,
     (SELECT SUM(quantite_demandee) FROM besoin_BNGRC WHERE type_besoin = 'argent') as total_argent_demande,
     (SELECT SUM(quantite_totale) FROM don_BNGRC WHERE type_don = 'argent') as total_argent_donne;
+
+    -- 1. Vérifier tous les prix unitaires (catalogue)
+SELECT * FROM prix_unitaire_BNGRC;
+-- Ou plus détaillé
+SELECT id, type_article, description, unite, prix_unitaire, 
+       FORMAT(prix_unitaire, 0) as prix_formate
+FROM prix_unitaire_BNGRC
+ORDER BY type_article, description;
+
+-- 2. Vérifier tous les achats
+SELECT * FROM achat_BNGRC;
+
+-- 3. Vérifier les achats avec détails (don, besoin, ville)
+SELECT 
+    a.id,
+    d.donateur,
+    d.description as don_description,
+    v.nom_ville,
+    b.description as besoin_description,
+    a.description_article,
+    a.quantite,
+    a.prix_unitaire_achat,
+    a.montant_total,
+    FORMAT(a.montant_total, 0) as montant_formate,
+    a.date_achat
+FROM achat_BNGRC a
+JOIN don_BNGRC d ON a.don_id = d.id
+JOIN besoin_BNGRC b ON a.besoin_id = b.id
+JOIN ville_BNGRC v ON b.ville_id = v.id
+ORDER BY a.date_achat DESC;
+
+-- 4. Compter les enregistrements
+SELECT 'Prix unitaires' as table_name, COUNT(*) as total FROM prix_unitaire_BNGRC
+UNION ALL
+SELECT 'Achats', COUNT(*) FROM achat_BNGRC;
+
+-- 5. Voir les achats par ville
+SELECT 
+    v.nom_ville,
+    COUNT(a.id) as nombre_achats,
+    SUM(a.montant_total) as total_depense,
+    FORMAT(SUM(a.montant_total), 0) as total_formate
+FROM achat_BNGRC a
+JOIN besoin_BNGRC b ON a.besoin_id = b.id
+JOIN ville_BNGRC v ON b.ville_id = v.id
+GROUP BY v.nom_ville
+ORDER BY total_depense DESC;
+
+-- 6. Voir les achats par donateur
+SELECT 
+    d.donateur,
+    d.type_don,
+    COUNT(a.id) as nombre_achats,
+    SUM(a.montant_total) as total_utilise,
+    FORMAT(SUM(a.montant_total), 0) as total_formate
+FROM achat_BNGRC a
+JOIN don_BNGRC d ON a.don_id = d.id
+GROUP BY d.donateur, d.type_don
+ORDER BY total_utilise DESC;
+
+-- 7. Voir les prix par type d'article
+SELECT 
+    type_article,
+    COUNT(*) as nombre_articles,
+    MIN(prix_unitaire) as prix_min,
+    MAX(prix_unitaire) as prix_max,
+    AVG(prix_unitaire) as prix_moyen,
+    FORMAT(AVG(prix_unitaire), 0) as prix_moyen_formate
+FROM prix_unitaire_BNGRC
+GROUP BY type_article;
+
+-- 8. Les 10 derniers achats
+SELECT 
+    a.date_achat,
+    v.nom_ville,
+    a.description_article,
+    a.quantite,
+    p.unite,
+    a.prix_unitaire_achat,
+    a.montant_total,
+    d.donateur
+FROM achat_BNGRC a
+JOIN besoin_BNGRC b ON a.besoin_id = b.id
+JOIN ville_BNGRC v ON b.ville_id = v.id
+JOIN don_BNGRC d ON a.don_id = d.id
+LEFT JOIN prix_unitaire_BNGRC p ON p.description = a.description_article
+ORDER BY a.date_achat DESC
+LIMIT 10;
+
+-- 9. Montant total des achats
+SELECT 
+    SUM(montant_total) as total_achats,
+    FORMAT(SUM(montant_total), 0) as total_formate,
+    COUNT(*) as nombre_achats
+FROM achat_BNGRC;
+
+-- 10. Vérifier les achats par besoin (pour voir si un besoin a été satisfait par achat)
+SELECT 
+    b.id as besoin_id,
+    v.nom_ville,
+    b.description,
+    b.quantite_demandee,
+    b.unite,
+    COUNT(a.id) as nombre_achats,
+    SUM(a.quantite) as total_achete,
+    (b.quantite_demandee - SUM(a.quantite)) as reste_a_acheter
+FROM besoin_BNGRC b
+JOIN ville_BNGRC v ON b.ville_id = v.id
+LEFT JOIN achat_BNGRC a ON b.id = a.besoin_id
+WHERE b.type_besoin IN ('nature', 'materiaux') -- Seulement ceux qu'on peut acheter
+GROUP BY b.id, v.nom_ville, b.description, b.quantite_demandee, b.unite
+ORDER BY reste_a_acheter DESC;

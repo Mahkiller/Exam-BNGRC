@@ -31,6 +31,27 @@
         </div>
     </div>
 
+    <!-- Types de Donateurs -->
+    <div class="donateurs-section">
+        <h3>Types de donateurs</h3>
+        <div class="donateurs-grid">
+            <div class="donateur-card international">
+                <div class="donateur-icon">🌍</div>
+                <div class="donateur-content">
+                    <div class="donateur-type">Dons internationaux</div>
+                    <div class="donateur-count"><?= $donateurs['internationaux'] ?? 0 ?></div>
+                </div>
+            </div>
+            <div class="donateur-card national">
+                <div class="donateur-icon">🇲🇬</div>
+                <div class="donateur-content">
+                    <div class="donateur-type">Dons nationaux</div>
+                    <div class="donateur-count"><?= $donateurs['nationaux'] ?? 0 ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Stock disponible -->
     <div class="stock-info">
         <h3>Stock disponible</h3>

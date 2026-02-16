@@ -13,6 +13,21 @@ class DashboardController extends Controller {
     public function index() {
         $stockGlobal = $this->stockService->getStockGlobal();
         
+        // Obtenir les stats par type de donateur
+        $statsDonateurs = $this->donService->getStatsDonateurs();
+        $donateurStats = [
+            'internationaux' => 0,
+            'nationaux' => 0
+        ];
+        
+        foreach ($statsDonateurs as $stat) {
+            if ($stat['type_donateur'] === 'International') {
+                $donateurStats['internationaux'] = $stat['nombre_dons'];
+            } else {
+                $donateurStats['nationaux'] = $stat['nombre_dons'];
+            }
+        }
+        
         // DEBUG : Afficher le contenu de $stockGlobal pour vérifier
         // var_dump($stockGlobal); exit;
         
@@ -33,7 +48,8 @@ class DashboardController extends Controller {
                 'critiques' => $this->besoinService->getBesoinsCritiques(),
                 'stats' => $this->besoinService->getStatsUrgence()
             ],
-            'top_donateurs' => $this->donService->getTopDonateurs(3)
+            'top_donateurs' => $this->donService->getTopDonateurs(3),
+            'donateurs' => $donateurStats
         ];
         
         $this->view('dashboard', $data);

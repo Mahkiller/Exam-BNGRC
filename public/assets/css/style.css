@@ -706,6 +706,83 @@ tr.satisfait {
     }
 }
 
+/* ===== DONATEURS ===== */
+.donateurs-section {
+    margin: 30px 0;
+}
+
+.donateurs-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+.donateurs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.donateur-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-left: 5px solid #ccc;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.donateur-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.donateur-card.international {
+    border-left-color: #006064;
+    background: linear-gradient(135deg, #f0f7fa 0%, #ffffff 100%);
+}
+
+.donateur-card.national {
+    border-left-color: #d32f2f;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+}
+
+.donateur-icon {
+    font-size: 2.5rem;
+    min-width: 60px;
+    text-align: center;
+}
+
+.donateur-content {
+    flex: 1;
+}
+
+.donateur-type {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.donateur-count {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.donateur-card.international .donateur-count {
+    color: #006064;
+}
+
+.donateur-card.national .donateur-count {
+    color: #d32f2f;
+}
+
 @media (max-width: 600px) {
     .ville-card {
         flex: 0 0 calc(100% - 0px);
@@ -723,5 +800,9 @@ tr.satisfait {
     .main-nav {
         flex-wrap: wrap;
         justify-content: center;
+    }
+    
+    .donateurs-grid {
+        grid-template-columns: 1fr;
     }
 }
