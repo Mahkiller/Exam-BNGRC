@@ -11,26 +11,65 @@
     </script>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <div class="logo">BNGRC <span>Gestion des sinistrés</span></div>
-        </div>
-        <nav class="main-nav">
-            <a href="<?= BASE_URL ?>/dashboard" class="nav-link">Tableau de bord</a>
-            <a href="<?= BASE_URL ?>/besoins" class="nav-link">Besoins</a>
-            <a href="<?= BASE_URL ?>/dons" class="nav-link">Dons</a>
-            <a href="<?= BASE_URL ?>/attribution" class="nav-link">Attribution</a>
-            <a href="<?= BASE_URL ?>/achats" class="nav-link">Achats</a>
-            <a href="<?= BASE_URL ?>/recap" class="nav-link">📊 Recap</a>
-        </nav>
-    </header>
-    <main class="container">
-        <?php if (isset($_SESSION['message'])): ?>
-            <div class="alert success"><?= $_SESSION['message'] ?></div>
-            <?php unset($_SESSION['message']); ?>
-        <?php endif; ?>
-        
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert error"><?= $_SESSION['error'] ?></div>
-            <?php unset($_SESSION['error']); ?>
-        <?php endif; ?>
+    <div class="app-container">
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">BNGRC</div>
+                <div class="logo-sub">Gestion des sinistrés</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <a href="<?= BASE_URL ?>/dashboard" class="nav-item">📊 Tableau de bord</a>
+                    <a href="<?= BASE_URL ?>/besoins" class="nav-item">📝 Besoins</a>
+                    <a href="<?= BASE_URL ?>/dons" class="nav-item">📦 Dons reçus</a>
+                    <a href="<?= BASE_URL ?>/attribution" class="nav-item">🔄 Attribution</a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">GESTION</div>
+                    <a href="<?= BASE_URL ?>/achats" class="nav-item">🛒 Achats</a>
+                    <a href="<?= BASE_URL ?>/recap" class="nav-item">📈 Récapitulatif</a>
+                    <a href="<?= BASE_URL ?>/parametres" class="nav-item">⚙️ Paramètres</a>
+                </div>
+                
+                <div class="nav-section">
+                    <a href="#" class="nav-item">❓ Aide</a>
+                    <a href="#" class="nav-item">💬 Feedback</a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span class="user-name">Agent BNGRC</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <?php if (isset($_SESSION['message'])): ?>
+                    <div class="alert success"><?= $_SESSION['message'] ?></div>
+                    <?php unset($_SESSION['message']); ?>
+                <?php endif; ?>
+                
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert error"><?= $_SESSION['error'] ?></div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+                
+                <!-- LE CONTENU DES PAGES SERA INSÉRÉ ICI -->
+
+        <main class="main-content">
+            <?php if (isset($_SESSION['message'])): ?>
+                <div class="alert success"><?= $_SESSION['message'] ?></div>
+                <?php unset($_SESSION['message']); ?>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert error"><?= $_SESSION['error'] ?></div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
