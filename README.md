@@ -33,7 +33,7 @@ Examen S3
 │     │  └─ script.js
 │     └─ template_bootstrap/
 ├─ database/
-│  └─ data_test.sql
+│  └─ base.sql
 ├─ to do list.md
 ├─ README.md
 └─ (autres fichiers / dossiers selon implémentation)
