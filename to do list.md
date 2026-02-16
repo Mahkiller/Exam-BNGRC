@@ -2,17 +2,17 @@ Ligne 1 | Catégorie : Web | Module : Backoffice
 Nom page / fichier : `app/controllers/CategoriesController.php`
 Description : Gestion des catégories de dons : ajout / modif / suppression
 Type : Function / Base
-Estimation : 2h
-Temps passé : 0
-Reste à faire : 2h
-Avancement : 0%
-Qui :
-Status : À faire
+Estimation : 1h
+Temps passé : 1h
+Reste à faire : 0
+Avancement : 100%
+Qui :Tsila
+Status : Termine
 Priorité : Haute
 
 Ligne 2 | Catégorie : Web | Module : Backoffice
 Nom page / fichier : `app/views/dashboard_admin.php`
-Description : Tableau de bord : liste des villes, besoins, dons attribués
+Description : Dashboard : liste des villes, besoins, dons attribués
 Type : Function / Affichage
 Estimation : 2h
 Temps passé : 0
@@ -24,7 +24,7 @@ Priorité : Haute
 
 Ligne 3 | Catégorie : Web | Module : Backoffice
 Nom page / fichier : `app/views/statistiques.php`
-Description : Statistiques globales : nombre de villes, nombre de besoins couverts
+Description : Stat globales : nombre de villes, nombre de besoins couverts
 Type : Function / Affichage
 Estimation : 1h
 Temps passé : 0
@@ -197,6 +197,56 @@ Type : Base / Code integration
 Estimation : 1h
 Temps passé : 0
 Reste à faire : 1h
+Avancement : 0%
+Qui :
+Status : À faire
+Priorité : Haute
+
+
+Suite V2
+Ligne 18 | Catégorie : Web | Module : Frontoffice
+Nom page / fichier : `app/controllers/AchatsController.php`
+Description : Gérer les achats de besoins (en nature et en matériaux) avec prix unitaires fixes + table `achats`
+Type : Function / Base / Code integration
+Estimation : 2h
+Temps passé : 0h
+Reste à faire : 2h
+Avancement : 0%
+Qui :
+Status : À faire
+Priorité : Haute
+
+Ligne 19 | Catégorie : Web | Module : Frontoffice
+Nom page / fichier : `app/views/achats.php`
+Description : Liste des achats filtrable par ville + saisie des achats
+Type : Affichage / Function
+Estimation : 2h
+Temps passé : 0h
+Reste à faire : 2h
+Avancement : 0%
+Qui :
+Status : À faire
+Priorité : Haute
+
+Ligne 20 | Catégorie : Web | Module : Frontoffice
+Nom page / fichier : `app/views/dashboard_financier.php`
+Description : Tableau de bord affichant montants dʼachat par ville, dons reçus et dispatchés
+Type : Affichage / Function
+Estimation : 2h
+Temps passé : 0h
+Reste à faire : 2h
+Avancement : 0%
+Qui :
+Status : À faire
+Priorité : Haute
+
+Ligne 21 | Catégorie : Web | Module : Frontoffice
+Nom page / fichier : `app/views/recap_financier.php`
+Description : Page récapitulative affichant besoins totaux et satisfaits en montant, dons reçus et dispatchés + bouton actualiser en Ajax
+Type : Affichage / Function / Code integration
+Estimation : 2h
+Temps passé : 0h
+Reste à faire : 2h
 Avancement : 0%
 Qui :
 Status : À faire

@@ -3,13 +3,17 @@
 │  ├─ controllers/
 │  │  ├─ BesoinsController.php
 │  │  ├─ DonsController.php
-│  │  └─ DashboardController.php
+│  │  ├─ AchatsController.php
+│  │  ├─ DashboardController.php
+│  │  └─ RecapController.php
 │  ├─ models/
 │  │  ├── BesoinModel.php
-│  │  └── DonModel.php
+│  │  ├── DonModel.php
+│  │  └── AchatModel.php
 │  ├─ services/
 │  │  ├── BesoinService.php
 │  │  ├── DonService.php
+│  │  ├── AchatService.php
 │  │  ├── StockService.php
 │  │  └── ValidationService.php
 │  ├─ views/
@@ -17,9 +21,12 @@
 │  │  │  ├── header.php
 │  │  │  └── footer.php
 │  │  ├── dashboard.php
+│  │  ├── dashboard_financier.php
 │  │  ├── besoins.php
 │  │  ├── dons.php
-│  │  └── attribution.php
+│  │  ├── attribution.php
+│  │  ├── achats.php
+│  │  └── recap_financier.php
 │  ├─ config/
 │  │  ├── config.php
 │  │  ├── database.php
@@ -37,7 +44,8 @@
 │     └── js/
 │        └── script.js
 ├─ database/
-│  └── base.sql
+│  ├── base.sql
+│  └── achats.sql   (si tu sépares la table achats)
 ├─ .htaccess
 ├─ todo.md
 └─ README.md
