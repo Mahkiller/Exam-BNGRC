@@ -1,3 +1,5 @@
+ V1
+
 Ligne 1 | Catégorie : Web | Module : Backoffice
 Nom page / fichier : `app/controllers/CategoriesController.php`
 Description : Gestion des catégories de dons : ajout / modif / suppression
@@ -6,55 +8,55 @@ Estimation : 1h
 Temps passé : 1h
 Reste à faire : 0
 Avancement : 100%
-Qui :Tsila
-Status : Termine
+Qui : Tsila
+Status : Terminé
 Priorité : Haute
 
 Ligne 2 | Catégorie : Web | Module : Backoffice
-Nom page / fichier : `app/views/dashboard_admin.php`
+Nom page / fichier : `app/views/dashboard.php`
 Description : Dashboard : liste des villes, besoins, dons attribués
 Type : Function / Affichage
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Haute
 
 Ligne 3 | Catégorie : Web | Module : Backoffice
-Nom page / fichier : `app/views/statistiques.php`
+Nom page / fichier : `app/views/dashboard.php`
 Description : Stat globales : nombre de villes, nombre de besoins couverts
 Type : Function / Affichage
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Moyenne
 
 Ligne 4 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/home.php`
+Nom page / fichier : `app/controllers/DashboardController.php`
 Description : Page d’accueil (point d’entrée — pas de page de login)
 Type : Affichage
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Moyenne
 
 Ligne 5 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/MesBesoinsController.php`
+Nom page / fichier : `app/controllers/BesoinsController.php`
 Description : Ajouter / modifier / supprimer les besoins des sinistrés par ville
 Type : Affichage / Function / Base
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Haute
 
@@ -63,70 +65,70 @@ Nom page / fichier : `app/controllers/DonsController.php`
 Description : Ajouter / modifier / supprimer les dons disponibles
 Type : Affichage / Function / Base
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Haute
 
 Ligne 7 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/AttributionDonsController.php`
+Nom page / fichier : `app/views/attribution.php`
 Description : Attribuer un don à un besoin spécifique avec contrôle de quantité
 Type : Function / Code integration
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Haute
 
 Ligne 8 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/dashboard.php`
+Nom page / fichier : `app/views/dashboard.php`
 Description : Voir toutes les villes, leurs besoins et les dons attribués
 Type : Affichage / Function
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Haute
 
 Ligne 9 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `app/controllers/HistoriqueVilleController.php`
+Nom page / fichier : `app/controllers/RecapController.php`
 Description : Historique des distributions par ville avec date et heure
 Type : Function / Base / Affichage
 Estimation : 2h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Tsila
 Status : À faire
 Priorité : Moyenne
 
 Ligne 10 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/assets/template_bootstrap/`
+Nom page / fichier : `public/assets/`
 Description : Intégration template ou création Bootstrap responsive
 Type : Affichage / Code integration
 Estimation : 3h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 3h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Moyenne
 
 Ligne 11 | Catégorie : Web | Module : Frontoffice
-Nom page / fichier : `public/footer.php`
+Nom page / fichier : `app/views/layout/footer.php`
 Description : Mettre nom et numéro ETU des membres du projet
 Type : Affichage
 Estimation : 0.5h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 0.5h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Basse
 
@@ -135,22 +137,22 @@ Nom page / fichier : `repo`
 Description : Créer un repo Git public pour le projet
 Type : Code integration
 Estimation : 0.5h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 0.5h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Haute
 
 Ligne 13 | Catégorie : Web | Module : Frontoffice / Test
-Nom page / fichier : `database/data_test.sql`
+Nom page / fichier : `database/base.sql`
 Description : Créer données de test pour villes, besoins, dons
 Type : Base
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Moyenne
 
@@ -159,10 +161,10 @@ Nom page / fichier : `public/assets/css/style.css`
 Description : Créer le CSS principal + intégrer Bootstrap si nécessaire
 Type : Affichage
 Estimation : 1.5h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1.5h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Moyenne
 
@@ -171,22 +173,22 @@ Nom page / fichier : `public/assets/js/script.js`
 Description : Ajouter les scripts JS nécessaires pour les formulaires et validations
 Type : Code integration
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Moyenne
 
 Ligne 16 | Catégorie : Web | Module : Frontoffice / Config
-Nom page / fichier : `app/config/routes.php`
+Nom page / fichier : `public/index.php`
 Description : Définir toutes les routes pour Flight MVC (dashboard, besoins, dons…)
 Type : Code integration
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Haute
 
@@ -195,15 +197,15 @@ Nom page / fichier : `app/config/config.php`
 Description : Configurer la connexion base de données et services
 Type : Base / Code integration
 Estimation : 1h
-Temps passé : 0
+Temps passé : 0h
 Reste à faire : 1h
 Avancement : 0%
-Qui :
+Qui : Magy
 Status : À faire
 Priorité : Haute
 
+ V2
 
-Suite V2
 Ligne 18 | Catégorie : Web | Module : Frontoffice
 Nom page / fichier : `app/controllers/AchatsController.php`
 Description : Gérer les achats de besoins (en nature et en matériaux) avec prix unitaires fixes + table `achats`
@@ -212,7 +214,7 @@ Estimation : 2h
 Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Haute
 
@@ -224,7 +226,7 @@ Estimation : 2h
 Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Haute
 
@@ -236,7 +238,7 @@ Estimation : 2h
 Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Haute
 
@@ -248,6 +250,6 @@ Estimation : 2h
 Temps passé : 0h
 Reste à faire : 2h
 Avancement : 0%
-Qui :
+Qui : Mahery
 Status : À faire
 Priorité : Haute
