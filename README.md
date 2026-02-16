@@ -1,32 +1,42 @@
 
 / (Exam-BNGRC)
+/ (Exam-BNGRC)
 ├─ app/
 │  ├─ controllers/
-│  │  ├─ categories.php
-│  │  ├─ mes_besoins.php
-│  │  ├─ dons.php
-│  │  ├─ attribution_dons.php
-│  │  └─ historique_ville.php
+│  │  ├─ BesoinsController.php
+│  │  ├─ DonsController.php
+│  │  ├─ DashboardController.php
+│  │  └─ AuthController.php
+│  ├─ models/
+│  │  ├── BesoinModel.php
+│  │  └── DonModel.php
+│  ├─ services/                           NOUVEAU (logique métier)
+│  │  ├── BesoinService.php
+│  │  ├── DonService.php
+│  │  ├── StockService.php               (vérifie les quantités)
+│  │  └── ValidationService.php           (règles de gestion)
 │  ├─ views/
-│  │  ├─ dashboard_admin.php
-│  │  ├─ statistiques.php
-│  │  ├─ dashboard.php
-│  │  └─ footer.php
+│  │  ├── layout/
+│  │  │  ├── header.php
+│  │  │  └── footer.php
+│  │  ├── dashboard.php
+│  │  ├── besoins.php
+│  │  ├── dons.php
+│  │  └── attribution.php
 │  └─ config/
-│     ├─ routes.php
-│     └─ config.php
+│     ├── config.php                   (connexion DB)
+│     ├── routes.php
+│     └── service.php                      AJOUTÉ (injection de services)
 ├─ public/
-│  ├─ views/
-│  │  └─ home.php
-│  └─ assets/
-│     ├─ css/
-│     │  └─ style.css
-│     ├─ js/
-│     │  └─ script.js
-│     └─ template_bootstrap/
+│  ├── index.php
+│  ├── assets/
+│  │  ├── css/
+│  │  │  └── style.css
+│  │  └── js/
+│  │     └── script.js
 ├─ database/
-│  └─ base.sql
-├─ to do list.md
-├─ README.md
-└─ (autres fichiers / dossiers selon implémentation)
+│  └── base.sql
+├─ .htaccess
+├─ todo.md
+└─ README.md
 \
