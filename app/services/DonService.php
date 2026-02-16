@@ -81,11 +81,65 @@ class DonService {
             ];
         }
         
+        // Vérifier que le don a assez de stock
+        $don = $this->donModel->getById($don_id);
+        if (!$don) {
+            return [
+                'success' => false,
+                'message' => 'Don introuvable'
+            ];
+        }
+        
+        // Calculer le montant déjà utilisé pour ce don
+        $montant_utilise = $this->getMontantUtiliseDon($don_id);
+        $montant_disponible = $don['quantite_totale'] - $montant_utilise;
+        
+        if ($quantite > $montant_disponible) {
+            return [
+                'success' => false,
+                'message' => 'Stock insuffisant pour ce don. Disponible: ' . $montant_disponible
+            ];
+        }
+        
         $result = $this->donModel->attribuer($besoin_id, $don_id, $quantite);
         
         return [
             'success' => $result,
             'message' => $result ? 'Attribution réussie' : 'Erreur lors de l\'attribution'
         ];
+    }
+    
+    private function getMontantUtiliseDon($don_id) {
+        $db = Database::getInstance();
+        
+        // Somme des attributions
+        $stmt = $db->prepare("SELECT SUM(quantite_attribuee) as total FROM attribution_BNGRC WHERE don_id = ?");
+        $stmt->execute([$don_id]);
+        $attributions = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+        
+        // Somme des achats (si don en argent)
+        $stmt = $db->prepare("SELECT SUM(montant_total) as total FROM achat_BNGRC WHERE don_id = ?");
+        $stmt->execute([$don_id]);
+        $achats = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+        
+        return $attributions + $achats;
+    }
+    
+    public function getDonsAvecUtilisation() {
+        $dons = $this->getAllDons();
+        $result = [];
+        
+        foreach ($dons as $don) {
+            $montant_utilise = $this->getMontantUtiliseDon($don['id']);
+            $result[] = [
+                'don' => $don,
+                'total' => $don['quantite_totale'],
+                'utilise' => $montant_utilise,
+                'reste' => $don['quantite_totale'] - $montant_utilise,
+                'type' => $don['type_don']
+            ];
+        }
+        
+        return $result;
     }
 }

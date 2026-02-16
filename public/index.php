@@ -79,39 +79,13 @@ Flight::route('/attribution', function () {
     return $controller->attribution();
 });
 
-// Routes Achats
-Flight::route('/achats', function () {
-    $controller = new AchatController();
-    return $controller->index();
-});
-
-Flight::route('/achats/creer', function () {
-    $controller = new AchatController();
-    return $controller->creer();
-});
-
-Flight::route('/achats/supprimer', function () {
-    $controller = new AchatController();
-    return $controller->supprimer();
-});
-
-// Routes Récapitulatif
-Flight::route('/recap', function () {
-    $controller = new RecapController();
-    return $controller->index();
-});
-
-Flight::route('/recap/actualiser', function () {
-    $controller = new RecapController();
-    return $controller->actualiser();
-});
-
+// Route pour l'attribution AJAX
 Flight::route('/attribution/attribuer', function () {
     $controller = new DonsController();
     return $controller->attribuer();
 });
 
-// Routes Achats
+// Routes Achats (une seule fois !)
 Flight::route('/achats', function () {
     $controller = new AchatController();
     return $controller->index();
@@ -127,7 +101,7 @@ Flight::route('/achats/supprimer', function () {
     return $controller->supprimer();
 });
 
-// Routes Récapitulatif Financier
+// Routes Récapitulatif Financier (une seule fois !)
 Flight::route('/recap', function () {
     $controller = new RecapController();
     return $controller->index();

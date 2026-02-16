@@ -18,6 +18,15 @@ class StockService {
     public function getStockRestant($type) {
         $totalDons = $this->donModel->getStockTotal($type);
         $totalAttribue = $this->besoinModel->getTotalAttribue($type);
+        
+        // Si c'est de l'argent, il faut aussi soustraire les achats
+        if ($type === 'argent') {
+            $db = Database::getInstance();
+            $stmt = $db->query("SELECT SUM(montant_total) as total FROM achat_BNGRC");
+            $totalAchats = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            return $totalDons - $totalAttribue - $totalAchats;
+        }
+        
         return $totalDons - $totalAttribue;
     }
     

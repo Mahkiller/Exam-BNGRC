@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.disabled = true;
                 btn.textContent = 'Attribution...';
                 
-                // Appel AJAX
-                fetch('<?= BASE_URL ?>/attribution/attribuer', {
+                // Appel AJAX - CORRIGÉ : utiliser BASE_URL + bonne route
+                fetch(BASE_URL + '/attribution/attribuer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -127,7 +127,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-    }
-});
     }
 });
