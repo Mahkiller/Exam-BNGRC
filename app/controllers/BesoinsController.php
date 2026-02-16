@@ -16,8 +16,10 @@ class BesoinsController extends Controller {
         $this->view('besoins', $data);
     }
     
-    public function ajouter() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+            public function ajouter() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
             $ville_id = $_POST['ville_id'];
             $type_besoin = $_POST['type_besoin'];
             $description = $_POST['description'];
@@ -28,14 +30,14 @@ class BesoinsController extends Controller {
             $result = $this->besoinService->ajouterBesoin(
                 $ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence
             );
-            
-            if ($result['success']) {
-                $_SESSION['message'] = 'Besoin ajouté avec succès';
-                $this->redirect('/besoins');
-            } else {
-                $_SESSION['error'] = $result['message'];
-                $this->redirect('/besoins');
-            }
+        
+        if ($result['success']) {
+            $_SESSION['message'] = 'Besoin ajouté avec succès';
+            $this->redirect('besoins');  // Enlève le slash
+        } else {
+            $_SESSION['error'] = $result['message'];
+            $this->redirect('besoins');  // Enlève le slash
         }
     }
+}
 }

@@ -79,6 +79,33 @@ Flight::route('/attribution', function () {
     return $controller->attribution();
 });
 
+// Routes Achats
+Flight::route('/achats', function () {
+    $controller = new AchatController();
+    return $controller->index();
+});
+
+Flight::route('/achats/creer', function () {
+    $controller = new AchatController();
+    return $controller->creer();
+});
+
+Flight::route('/achats/supprimer', function () {
+    $controller = new AchatController();
+    return $controller->supprimer();
+});
+
+// Routes Récapitulatif
+Flight::route('/recap', function () {
+    $controller = new RecapController();
+    return $controller->index();
+});
+
+Flight::route('/recap/actualiser', function () {
+    $controller = new RecapController();
+    return $controller->actualiser();
+});
+
 Flight::route('/attribution/attribuer', function () {
     $controller = new DonsController();
     return $controller->attribuer();

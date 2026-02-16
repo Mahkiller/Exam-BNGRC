@@ -85,6 +85,13 @@ class DonModel extends Model {
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM don_BNGRC");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
+
+    // Ajoute après getTotalDons()
+public function getById($id) {
+    $stmt = $this->db->prepare("SELECT * FROM don_BNGRC WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
     
     // Récupérer les stats par type de donateur
     public function getStatsParTypeDonateur() {
