@@ -4,21 +4,6 @@
 
 <h1>Gestion des besoins</h1>
 
-<?php if (!empty($critiques)): ?>
-<div class="alert urgent">
-    <h3>⚠️ BESOINS CRITIQUES NON SATISFAITS</h3>
-    <ul>
-        <?php foreach ($critiques as $critique): ?>
-        <li>
-            <strong><?= $critique['nom_ville'] ?>:</strong>
-            <?= $critique['description'] ?> - 
-            Manque <?= $critique['manque'] ?> <?= $critique['unite'] ?>
-        </li>
-        <?php endforeach; ?>
-    </ul>
-</div>
-<?php endif; ?>
-
 <div class="stats-mini">
     <?php foreach ($stats_urgence as $stat): ?>
     <div class="stat-mini <?= $stat['niveau_urgence'] ?>">

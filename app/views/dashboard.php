@@ -59,7 +59,7 @@
 
     <!-- Carrousel horizontal -->
     <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">〈</button>
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><</button>
         <div class="carousel-track" id="villeCarousel">
             <?php 
             // Regrouper les besoins par ville
@@ -142,7 +142,7 @@
             </div>
             <?php endif; ?>
         </div>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)">〉</button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)">></button>
     </div>
 
     <h2>Derniers dons enregistrés</h2>
