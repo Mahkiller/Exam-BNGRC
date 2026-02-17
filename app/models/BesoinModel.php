@@ -5,7 +5,7 @@ class BesoinModel extends Model {
     public function getAll() {
         $stmt = $this->db->query("
             SELECT b.*, v.nom_ville, v.region,
-                   COALESCE(SUM(a.quantite_attribuee), 0) as quantite_attribuee
+                COALESCE(SUM(a.quantite_attribuee), 0) as quantite_attribuee
             FROM besoin_BNGRC b
             JOIN ville_BNGRC v ON b.ville_id = v.id
             LEFT JOIN attribution_BNGRC a ON b.id = a.besoin_id
