@@ -9,7 +9,7 @@ class Controller {
     }
     
     protected function redirect($url) {
-        header('Location: ' . BASE_URL . $url);
+        header('Location: ' . BASE_URL . '/' . ltrim($url, '/'));
         exit();
     }
 }

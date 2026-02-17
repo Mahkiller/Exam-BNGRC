@@ -2,6 +2,20 @@
 // NE PAS METTRE DOCTYPE HTML ICI !
 ?>
 
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert success">
+        <?= $_SESSION['message'] ?>
+    </div>
+    <?php unset($_SESSION['message']); ?>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['error'])): ?>
+    <div class="alert error">
+        <?= $_SESSION['error'] ?>
+    </div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
 <h1>Gestion des dons</h1>
 
 <div class="stats-row">
