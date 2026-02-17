@@ -1,0 +1,5 @@
+V3
+Les donnes sont fournis par les prof
+Faire un bouton pour reinitialiser les nouvelles donnes et remettre les donnes colle pur dans la base
+On peut aussi vendre les dons, genre on a un camion et on le vend, donc on peut le vendre a bon prix vers les autres et on en obtient de l'argent, mais si un camion coute 100M Ar, on doit le vendre moins cher que ca genre 10% et qui est configurable
+Interdiction de vendre ce qui sont necessaire, on ne peut que vendre ce qui est non necessaire, si on vend un truc avec une demande, on affiche un erreur que on peut pas vendre ce produit genre : "Ce produit est encore en demande, on ne peut pas le vendre"
