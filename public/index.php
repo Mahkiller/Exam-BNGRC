@@ -74,7 +74,12 @@ Flight::route('/dons/ajouter', function () {
     return $controller->ajouter();
 });
 
-Flight::route('/attribution', function () {
+ Flight::route('/attribution', function () {
+    $controller = new DonsController();
+    return $controller->attribution();
+});
+
+Flight::route('/dons/attribution', function () {
     $controller = new DonsController();
     return $controller->attribution();
 });
