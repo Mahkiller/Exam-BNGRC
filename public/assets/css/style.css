@@ -1814,3 +1814,90 @@ tr.satisfait {
         gap: 0;
     }
 }
+
+/* ===== DASHBOARD HEADER & RESET BUTTON ===== */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px 0;
+    border-bottom: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    color: #333;
+}
+
+.btn-reset {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: 2px solid #ff9800;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.btn-reset:hover {
+    background: linear-gradient(135deg, #f57c00 0%, #ff9800 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+    border-color: #f57c00;
+}
+
+.btn-reset:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3);
+}
+
+.reset-icon {
+    font-size: 18px;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Version responsive */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .btn-reset {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 15px;
+    }
+    
+    .btn-reset {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+}

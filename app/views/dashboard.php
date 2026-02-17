@@ -3,7 +3,18 @@
 ?>
 
 <div class="dashboard-container">
-    <h1 class="animate-slide-top">📊 Tableau de bord</h1>
+    <!-- HEADER AVEC BOUTON RESET -->
+    <div class="dashboard-header animate-slide-top">
+        <h1>📊 Tableau de bord</h1>
+        
+        <form method="POST" action="<?= BASE_URL ?>/reset" 
+              onsubmit="return confirm('⚠️ ATTENTION !\n\nCette action va supprimer :\n• Tous les besoins\n• Tous les achats\n• Toutes les ventes\n• Toutes les attributions\n\nSeuls les dons de base seront conservés.\n\nÊtes-vous absolument sûr ?')">
+            <button type="submit" class="btn-reset">
+                <span class="reset-icon">🔄</span>
+                Réinitialiser les données
+            </button>
+        </form>
+    </div>
 
     <!-- Stats Cards -->
     <div class="stats-grid">
@@ -30,8 +41,6 @@
             </div>
         </div>
     </div>
-
-
 
     <h2 class="animate-slide-top" style="animation-delay: 0.2s;">Situation par ville</h2>
 
@@ -71,7 +80,6 @@
                 </div>
                 <div class="card-image">
                     <?php 
-                    // Générer le chemin de l'image en basculant le nom de ville en minuscules
                     $ville_slug = strtolower(str_replace(' ', '-', $ville['nom']));
                     $image_path = BASE_URL . '/assets/image/' . $ville_slug . '.jpg';
                     ?>
@@ -80,14 +88,13 @@
                 <div class="card-body">
                     <?php 
                     $total_besoins = count($ville['besoins']);
-                    $premiers_besoins = array_slice($ville['besoins'], 0, 2); // Affiche max 2 besoins
+                    $premiers_besoins = array_slice($ville['besoins'], 0, 2);
                     
                     foreach ($premiers_besoins as $besoin):
                         $quantite = $besoin['quantite_demandee'] ?? $besoin['quantite'] ?? 0;
                         $attribue = $besoin['attribue'] ?? $besoin['quantite_attribuee'] ?? 0;
                         $reste = $besoin['reste'] ?? ($quantite - $attribue);
                         $unite = $besoin['unite'] ?? '';
-                        $type = $besoin['type_besoin'] ?? $besoin['type'] ?? 'nature';
                         $description = $besoin['description'] ?? $besoin['besoin'] ?? 'Besoin';
                     ?>
                     <div class="besoin-item animate-fade">
@@ -119,7 +126,6 @@
             </div>
             <?php endforeach; ?>
 
-            <!-- Si aucune ville -->
             <?php if (empty($villes_data)): ?>
             <div class="ville-card">
                 <div class="card-body">
@@ -166,7 +172,7 @@
 <script>
 function scrollCarousel(direction) {
     const track = document.getElementById('villeCarousel');
-    const cardWidth = track.querySelector('.ville-card').offsetWidth + 25; // 25px = gap
+    const cardWidth = track.querySelector('.ville-card').offsetWidth + 25;
     const scrollAmount = cardWidth * direction;
     track.scrollBy({
         left: scrollAmount,

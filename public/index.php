@@ -30,16 +30,22 @@ spl_autoload_register(function ($class) {
 // Load configuration files
 require_once dirname(__DIR__) . '/app/config/config.php';
 require_once dirname(__DIR__) . '/app/config/database.php';
-require_once dirname(__DIR__) . '/app/config/service.php';
+require_once dirname(__DIR__) . '/app/config/ServiceContainer.php'; // AJOUTE CETTE LIGNE
 
 // Initialize Flight
 Flight::set('flight.base_url', BASE_URL);
+
+// ... reste du code inchangé ...
 
 // Handle static files
 $requested_file = __DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ($requested_file !== __FILE__ && is_file($requested_file)) {
     return false;
 }
+
+// ============================================
+// ROUTES
+// ============================================
 
 // Routes Dashboard
 Flight::route('/', function () {
@@ -50,6 +56,12 @@ Flight::route('/', function () {
 Flight::route('/dashboard', function () {
     $controller = new DashboardController();
     return $controller->index();
+});
+
+// Route Reset (POST)
+Flight::route('POST /reset', function () {
+    $controller = new ResetController();
+    return $controller->reset();
 });
 
 // Routes Besoins
@@ -74,7 +86,7 @@ Flight::route('/dons/ajouter', function () {
     return $controller->ajouter();
 });
 
- Flight::route('/attribution', function () {
+Flight::route('/attribution', function () {
     $controller = new DonsController();
     return $controller->attribution();
 });
@@ -101,7 +113,7 @@ Flight::route('/attribution/attribuer', function () {
     return $controller->attribuer();
 });
 
-// Routes Achats (une seule fois !)
+// Routes Achats
 Flight::route('/achats', function () {
     $controller = new AchatController();
     return $controller->index();
@@ -117,7 +129,7 @@ Flight::route('/achats/supprimer', function () {
     return $controller->supprimer();
 });
 
-// Routes Récapitulatif Financier (une seule fois !)
+// Routes Récapitulatif
 Flight::route('/recap', function () {
     $controller = new RecapController();
     return $controller->index();
@@ -163,7 +175,9 @@ Flight::route('/ventes/check-product', function () {
 // 404 Handler
 Flight::map('notFound', function() {
     http_response_code(404);
-    echo 'Page non trouvée (404)';
+    echo '<h1>404 - Page non trouvée</h1>';
+    echo '<p>La page que vous recherchez n\'existe pas.</p>';
+    echo '<a href="' . BASE_URL . '/dashboard">Retour au dashboard</a>';
 });
 
 // Start Flight

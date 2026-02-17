@@ -74,6 +74,19 @@ class DonModel extends Model {
             return $result['total'] ?? 0;
         }
     }
+    // Dans app/models/DonModel.php, ajoute cette méthode
+    public function getDonsProtect() {
+        // Cette méthode retourne les IDs des dons à protéger
+        $stmt = $this->db->query("
+            SELECT id FROM don_BNGRC 
+            WHERE donateur IN (
+                'Croix-Rouge', 'UNICEF', 'PNUD', 'ONG Miarakapa',
+                'Banque Mondiale', 'UE', 'JICA', 'USAID', 'Coopération Suisse'
+            )
+        ");
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_column($result, 'id');
+    }
     
     // Récupérer les dons non utilisés
     public function getDonsNonUtilises() {
