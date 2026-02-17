@@ -3,18 +3,18 @@
 ?>
 
 <div class="dashboard-container">
-    <h1>Tableau de bord</h1>
+    <h1 class="animate-slide-top">📊 Tableau de bord</h1>
 
     <!-- Stats Cards -->
     <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card stagger-item">
             <div class="stat-icon">📦</div>
             <div class="stat-content">
                 <div class="stat-value"><?= $stats['total_besoins'] ?? 0 ?></div>
                 <div class="stat-label">Besoins</div>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stagger-item">
             <div class="stat-icon">💰</div>
             <div class="stat-content">
                 <div class="stat-value"><?= $stats['total_dons'] ?? 0 ?></div>
@@ -22,7 +22,7 @@
                 <div class="stat-trend">+<?= rand(1, 5) ?> cette semaine</div>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stagger-item">
             <div class="stat-icon">🏙️</div>
             <div class="stat-content">
                 <div class="stat-value"><?= $stats['villes_aidees'] ?? 0 ?></div>
@@ -32,16 +32,16 @@
     </div>
 
     <!-- Stock disponible -->
-    <div class="stock-info">
+    <div class="stock-info animate-scale">
         <h3>Stock disponible</h3>
         <div class="stock-mini-grid">
-            <span class="stock-badge nature">
+            <span class="stock-badge nature stagger-item">
                 🌾 Riz: <strong><?= $stats['stock_riz'] ?? 0 ?> kg</strong>
             </span>
-            <span class="stock-badge argent">
+            <span class="stock-badge argent stagger-item">
                 💰 Argent: <strong><?= number_format($stats['stock_argent'] ?? 0) ?> Ar</strong>
             </span>
-            <span class="stock-badge materiaux">
+            <span class="stock-badge materiaux stagger-item">
                 🔨 Tôles: <strong><?= $stats['stock_toles'] ?? 0 ?> unités</strong>
             </span>
         </div>
@@ -49,13 +49,13 @@
 
     <!-- Sous-menu rapide -->
     <div class="quick-menu">
-        <a href="<?= BASE_URL ?>/statistiques" class="quick-link">📊 Statistiques</a>
-        <a href="<?= BASE_URL ?>/parametres" class="quick-link">⚙️ Paramètres</a>
-        <a href="#" class="quick-link">❓ Aide</a>
-        <a href="#" class="quick-link">💬 Feedback</a>
+        <a href="<?= BASE_URL ?>/statistiques" class="quick-link stagger-item">📊 Statistiques</a>
+        <a href="<?= BASE_URL ?>/parametres" class="quick-link stagger-item">⚙️ Paramètres</a>
+        <a href="#" class="quick-link stagger-item">❓ Aide</a>
+        <a href="#" class="quick-link stagger-item">💬 Feedback</a>
     </div>
 
-    <h2>Situation par ville</h2>
+    <h2 class="animate-slide-top" style="animation-delay: 0.2s;">Situation par ville</h2>
 
     <!-- Carrousel horizontal -->
     <div class="carousel-container">
@@ -84,7 +84,7 @@
             foreach ($villes_data as $ville): 
                 $classe_urgent = $ville['urgent'] ? 'urgent' : '';
             ?>
-            <div class="ville-card <?= $classe_urgent ?>">
+            <div class="ville-card stagger-item <?= $classe_urgent ?>">
                 <div class="card-header">
                     <h3><?= htmlspecialchars($ville['nom']) ?></h3>
                     <?php if ($ville['urgent']): ?>
@@ -104,13 +104,13 @@
                         $type = $besoin['type_besoin'] ?? $besoin['type'] ?? 'nature';
                         $description = $besoin['description'] ?? $besoin['besoin'] ?? 'Besoin';
                     ?>
-                    <div class="besoin-item">
+                    <div class="besoin-item animate-fade">
                         <span><?= htmlspecialchars($description) ?>:</span>
                         <strong><?= number_format($quantite, 0, ',', ' ') ?> <?= $unite ?></strong>
                     </div>
                     
                     <?php if ($attribue > 0): ?>
-                    <div class="besoin-item">
+                    <div class="besoin-item animate-fade">
                         <span>Déjà attribué:</span>
                         <strong><?= number_format($attribue, 0, ',', ' ') ?> <?= $unite ?></strong>
                     </div>

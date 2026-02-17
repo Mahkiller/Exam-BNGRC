@@ -11,6 +11,122 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== ANIMATIONS ===== */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Classe d'animation */
+.animate-slide-left {
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+.animate-slide-right {
+    animation: slideInFromRight 0.6s ease-out;
+}
+
+.animate-slide-top {
+    animation: slideInFromTop 0.6s ease-out;
+}
+
+.animate-slide-bottom {
+    animation: slideInFromBottom 0.6s ease-out;
+}
+
+.animate-fade {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-scale {
+    animation: scaleIn 0.6s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s ease-in-out infinite;
+}
+
 /* ===== LAYOUT AVEC SIDEBAR ===== */
 .app-container {
     display: flex;
@@ -1061,6 +1177,58 @@ tr.satisfait {
     margin-bottom: 30px;
 }
 
+/* ===== DELAY STAGGER EFFECT ===== */
+.stagger-item {
+    animation-fill-mode: both;
+}
+
+.stagger-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stagger-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stagger-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stagger-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.stagger-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.stagger-item:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+.stagger-item:nth-child(7) {
+    animation-delay: 0.7s;
+}
+
+.stagger-item:nth-child(8) {
+    animation-delay: 0.8s;
+}
+
+.stagger-item:nth-child(9) {
+    animation-delay: 0.9s;
+}
+
+.stagger-item:nth-child(n+10) {
+    animation-delay: 1s;
+}
+
+/* Animation version responsive */
+@media (max-width: 768px) {
+    .stagger-item {
+        animation-delay: 0.1s !important;
+    }
+}
+
 .donateur-card {
     display: flex;
     align-items: center;
@@ -1195,5 +1363,92 @@ tr.satisfait {
     
     .donateurs-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Animations optimisées pour mobile */
+    .stagger-item {
+        animation-delay: 0.05s !important; /* Plus rapide sur mobile */
+    }
+    
+    /* Réduire légèrement les animations sur petit écran */
+    @keyframes slideInFromLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-20px); /* Moins de mouvement */
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInFromRight {
+        from {
+            opacity: 0;
+            transform: translateX(20px); /* Moins de mouvement */
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-15px); /* Moins de mouvement */
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInFromBottom {
+        from {
+            opacity: 0;
+            transform: translateY(15px); /* Moins de mouvement */
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9); /* Scale moins agressif */
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    /* Animations plus courtes sur mobile */
+    .animate-slide-left,
+    .animate-slide-right,
+    .animate-slide-top,
+    .animate-slide-bottom,
+    .animate-fade,
+    .animate-scale {
+        animation-duration: 0.4s !important; /* 0.4s au lieu de 0.6s */
+    }
+}
+
+@media (max-width: 400px) {
+    /* Très petit écran - animations encore plus simples */
+    h1, h2, h3 {
+        animation: fadeIn 0.3s ease-out !important; /* Seulement du fade */
+    }
+    
+    .stat-card {
+        animation: fadeIn 0.3s ease-out !important;
+    }
+    
+    .stagger-item {
+        animation: fadeIn 0.3s ease-out !important;
+        animation-delay: 0.05s !important;
     }
 }

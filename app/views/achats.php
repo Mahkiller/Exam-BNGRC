@@ -4,7 +4,7 @@
 
 <div class="achats-container">
     <div class="header-section">
-        <h1>Gestion des Achats</h1>
+        <h1 class="animate-slide-top">🛒 Gestion des Achats</h1>
         <a href="<?= BASE_URL ?>/achats/creer" class="btn btn-primary">➕ Nouvel achat</a>
     </div>
 
@@ -25,14 +25,14 @@
 
     <!-- Statistiques -->
     <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card stagger-item">
             <div class="stat-icon">🛒</div>
             <div class="stat-content">
                 <div class="stat-value"><?= count($achats) ?></div>
                 <div class="stat-label">Total d'achats</div>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stagger-item">
             <div class="stat-icon">💳</div>
             <div class="stat-content">
                 <div class="stat-value"><?= number_format($total_montant, 0) ?> Ar</div>
@@ -43,10 +43,10 @@
 
     <!-- Montants par ville -->
     <div class="montants-section">
-        <h3>Montants d'achat par ville</h3>
+        <h3 class="animate-slide-top" style="animation-delay: 0.2s;">Montants d'achat par ville</h3>
         <div class="montants-grid">
             <?php foreach ($montant_par_ville as $item): ?>
-                <div class="montant-card">
+                <div class="montant-card stagger-item">
                     <div class="montant-ville"><?= htmlspecialchars($item['nom_ville']) ?></div>
                     <div class="montant-value"><?= number_format($item['montant_total'], 0) ?> Ar</div>
                 </div>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Tableau des achats -->
-    <div class="table-container">
+    <div class="table-container animate-slide-bottom">
         <h3>Liste des achats</h3>
         <?php if (!empty($achats)): ?>
             <table class="achats-table">

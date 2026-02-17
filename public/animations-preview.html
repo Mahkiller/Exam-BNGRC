@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Preview des Animations - BNGRC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .animations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .animation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .animation-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .animation-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .preview-box {
+            background: #f5f5f5;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .preview-box:hover {
+            background: #efefef;
+        }
+        
+        .preview-box.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .element {
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        /* Animations CSS */
+        @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInFromBottom {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .play-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        .play-btn:hover {
+            background: #764ba2;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section-title {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .footer {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .footer p {
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-item .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-item .value {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        .stat-item .label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .animations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .stats-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Animations BNGRC - Preview</h1>
+        
+        <div class="section-title">
+            <h2>✨ Types d'Animations Disponibles</h2>
+            <p>Cliquez sur "Jouer" pour voir l'animation en action. Ces animations sont automatiquement appliquées sur toutes les pages de votre application.</p>
+        </div>
+        
+        <div class="animations-grid">
+            <!-- Slide Left -->
+            <div class="animation-card">
+                <h2>📍 Slide Left</h2>
+                <p>Glisse depuis la gauche</p>
+                <div class="preview-box" onclick="playAnimation(this, 'slideInFromLeft')">
+                    <div class="element" style="animation: slideInFromLeft 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-slide-left"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'slideInFromLeft')">▶ Jouer</button>
+            </div>
+            
+            <!-- Slide Right -->
+            <div class="animation-card">
+                <h2>📍 Slide Right</h2>
+                <p>Glisse depuis la droite</p>
+                <div class="preview-box" onclick="playAnimation(this, 'slideInFromRight')">
+                    <div class="element" style="animation: slideInFromRight 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-slide-right"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'slideInFromRight')">▶ Jouer</button>
+            </div>
+            
+            <!-- Slide Top -->
+            <div class="animation-card">
+                <h2>📍 Slide Top</h2>
+                <p>Glisse depuis le haut</p>
+                <div class="preview-box" onclick="playAnimation(this, 'slideInFromTop')">
+                    <div class="element" style="animation: slideInFromTop 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-slide-top"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'slideInFromTop')">▶ Jouer</button>
+            </div>
+            
+            <!-- Slide Bottom -->
+            <div class="animation-card">
+                <h2>📍 Slide Bottom</h2>
+                <p>Glisse depuis le bas</p>
+                <div class="preview-box" onclick="playAnimation(this, 'slideInFromBottom')">
+                    <div class="element" style="animation: slideInFromBottom 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-slide-bottom"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'slideInFromBottom')">▶ Jouer</button>
+            </div>
+            
+            <!-- Fade In -->
+            <div class="animation-card">
+                <h2>✨ Fade In</h2>
+                <p>Apparition progressive</p>
+                <div class="preview-box" onclick="playAnimation(this, 'fadeIn')">
+                    <div class="element" style="animation: fadeIn 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-fade"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'fadeIn')">▶ Jouer</button>
+            </div>
+            
+            <!-- Scale In -->
+            <div class="animation-card">
+                <h2>🔍 Scale In</h2>
+                <p>Zoom d'apparition</p>
+                <div class="preview-box" onclick="playAnimation(this, 'scaleIn')">
+                    <div class="element" style="animation: scaleIn 0.6s ease-out;">Élément</div>
+                </div>
+                <div class="code-block">class="animate-scale"</div>
+                <button class="play-btn" onclick="playAnimation(event.target.parentNode, 'scaleIn')">▶ Jouer</button>
+            </div>
+        </div>
+        
+        <!-- Stagger Example -->
+        <div class="section-title">
+            <h2>🎬 Effet Stagger (Cascade)</h2>
+            <p>Les éléments s'animent les uns après les autres avec un délai automatique.</p>
+            <div class="stats-preview">
+                <div class="stat-item" style="animation: slideInFromBottom 0.6s ease-out 0.1s both;">
+                    <div class="icon">📦</div>
+                    <div class="value">125</div>
+                    <div class="label">Besoins</div>
+                </div>
+                <div class="stat-item" style="animation: slideInFromBottom 0.6s ease-out 0.2s both;">
+                    <div class="icon">💰</div>
+                    <div class="value">87</div>
+                    <div class="label">Dons</div>
+                </div>
+                <div class="stat-item" style="animation: slideInFromBottom 0.6s ease-out 0.3s both;">
+                    <div class="icon">🏙️</div>
+                    <div class="value">12</div>
+                    <div class="label">Villes</div>
+                </div>
+            </div>
+            <div class="code-block">&lt;div class="stat-card stagger-item"&gt;...&lt;/div&gt;
+&lt;div class="stat-card stagger-item"&gt;...&lt;/div&gt;
+&lt;div class="stat-card stagger-item"&gt;...&lt;/div&gt;</div>
+        </div>
+        
+        <!-- Pages Animées -->
+        <div class="section-title">
+            <h2>✅ Pages avec Animations</h2>
+            <p>Les animations suivantes sont automatiquement appliquées à chaque page :</p>
+            <div style="margin-top: 15px;">
+                <span class="badge">📊 Dashboard</span>
+                <span class="badge">📝 Besoins</span>
+                <span class="badge">📦 Dons</span>
+                <span class="badge">🔄 Attribution</span>
+                <span class="badge">✨ Et bien plus...</span>
+            </div>
+        </div>
+        
+        <!-- Quick Start -->
+        <div class="section-title">
+            <h2>🚀 Comment Utiliser</h2>
+            <p><strong>Aucune configuration nécessaire !</strong> Les animations se déclenchent automatiquement.</p>
+            <ol style="margin-left: 20px; margin-top: 15px; line-height: 2;">
+                <li>Rechargez une page et regardez les animations</li>
+                <li>Cliquez sur les liens pour naviguer entre les pages</li>
+                <li>Les animations s'appliquent à chaque chargement</li>
+            </ol>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>🎨 Système d'Animation BNGRC v1.0</strong></p>
+            <p>Créé avec ❤️ pour une expérience utilisateur fluide et professionnelle</p>
+            <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                📚 Documentation : Consultez <strong>ANIMATIONS.md</strong> pour plus d'détails
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function playAnimation(element, animationName) {
+            const previewBox = element.querySelector('.preview-box');
+            const animElement = previewBox.querySelector('.element');
+            
+            // Reset animation
+            animElement.style.animation = 'none';
+            void animElement.offsetWidth; // Trigger reflow
+            
+            // Play animation
+            animElement.style.animation = `${animationName} 0.6s ease-out`;
+        }
+    </script>
+</body>
+</html>

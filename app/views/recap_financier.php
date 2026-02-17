@@ -4,27 +4,27 @@
 
 <div class="recap-container">
     <div class="header-section">
-        <h1>Récapitulatif Financier</h1>
+        <h1 class="animate-slide-top">📊 Récapitulatif Financier</h1>
         <button id="btn-actualiser" class="btn btn-primary">🔄 Actualiser</button>
     </div>
 
     <!-- Besoins -->
     <div class="recap-section">
-        <h2>📋 Besoins</h2>
+        <h2 class="animate-slide-top" style="animation-delay: 0.1s;">📋 Besoins</h2>
         <div class="recap-cards">
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Montant total des besoins</div>
                 <div class="recap-value" id="besoins-total">
                     <?= number_format($besoins['total_montant'], 0) ?> Ar
                 </div>
             </div>
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Montant satisfait</div>
                 <div class="recap-value success" id="besoins-satisfait">
                     <?= number_format($besoins['satisfait'], 0) ?> Ar
                 </div>
             </div>
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Montant restant</div>
                 <div class="recap-value warning" id="besoins-reste">
                     <?= number_format($besoins['reste'], 0) ?> Ar
@@ -45,21 +45,21 @@
 
     <!-- Dons reçus -->
     <div class="recap-section">
-        <h2>💰 Dons Reçus (en Ariary)</h2>
+        <h2 class="animate-slide-top" style="animation-delay: 0.2s;">💰 Dons Reçus (en Ariary)</h2>
         <div class="recap-cards">
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Total reçu</div>
                 <div class="recap-value" id="dons-total">
                     <?= number_format($dons['total_recu'], 0) ?> Ar
                 </div>
             </div>
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Total dépensé</div>
                 <div class="recap-value" id="dons-dispache">
                     <?= number_format($dons['dispache'], 0) ?> Ar
                 </div>
             </div>
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Solde restant</div>
                 <div class="recap-value success" id="dons-reste">
                     <?= number_format($dons['reste'], 0) ?> Ar
@@ -80,9 +80,9 @@
 
     <!-- Achats effectués -->
     <div class="recap-section">
-        <h2>🛒 Achats Effectués</h2>
+        <h2 class="animate-slide-top" style="animation-delay: 0.3s;">🛒 Achats Effectués</h2>
         <div class="recap-cards">
-            <div class="recap-card">
+            <div class="recap-card stagger-item">
                 <div class="recap-label">Montant total des achats</div>
                 <div class="recap-value" id="achats-total">
                     <?= number_format($achats_total, 0) ?> Ar
@@ -94,7 +94,7 @@
         <div class="recent-achats">
             <h3>Derniers achats effectués</h3>
             <?php if (!empty($achats_recents)): ?>
-                <table class="recap-table">
+                <table class="recap-table animate-slide-bottom">
                     <thead>
                         <tr>
                             <th>Date</th>
