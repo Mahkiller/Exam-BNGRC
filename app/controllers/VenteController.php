@@ -60,6 +60,7 @@ class VenteController extends Controller {
         }
         
         try {
+            // ✅ IMPORTANT: Si don_id est vide, on met NULL
             $don_id = isset($_POST['don_id']) && !empty($_POST['don_id']) ? (int)$_POST['don_id'] : null;
             $produit_id = isset($_POST['produit_id']) ? (int)$_POST['produit_id'] : null;
             $quantite_vendue = isset($_POST['quantite_vendue']) ? (float)$_POST['quantite_vendue'] : 0;
