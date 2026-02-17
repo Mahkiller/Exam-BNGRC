@@ -20,7 +20,7 @@ class AchatService {
         return $this->achatModel->getByVille($ville_id);
     }
     
-    // Créer un achat
+    // Créer un achat - CORRIGÉ pour créer un don en nature
     public function creerAchat($don_id, $besoin_id, $description_article, $quantite, $prix_unitaire) {
         // Validation
         if (empty($don_id) || empty($besoin_id) || $quantite <= 0 || $prix_unitaire <= 0) {
@@ -52,7 +52,53 @@ class AchatService {
             ];
         }
         
+        // 1. Créer l'achat
         $result = $this->achatModel->create($don_id, $besoin_id, $description_article, $quantite, $prix_unitaire);
+        
+        if ($result) {
+            // 2. CRÉER UN DON EN NATURE AUTOMATIQUEMENT
+            // Déterminer le type d'article
+            $type_article = 'nature'; // Par défaut
+            $description_lower = strtolower($description_article);
+            
+            if (strpos($description_lower, 'tôle') !== false || 
+                strpos($description_lower, 'ciment') !== false ||
+                strpos($description_lower, 'clou') !== false ||
+                strpos($description_lower, 'bâche') !== false ||
+                strpos($description_lower, 'bois') !== false ||
+                strpos($description_lower, 'parpaing') !== false ||
+                strpos($description_lower, 'brique') !== false) {
+                $type_article = 'materiaux';
+            }
+            
+            // Déterminer l'unité
+            $unite = 'kg';
+            if (strpos($description_lower, 'litre') !== false) {
+                $unite = 'litre';
+            } elseif (strpos($description_lower, 'sac') !== false) {
+                $unite = 'sac';
+            } elseif (strpos($description_lower, 'plaque') !== false) {
+                $unite = 'plaque';
+            } elseif (strpos($description_lower, 'm3') !== false) {
+                $unite = 'm3';
+            } elseif (strpos($description_lower, 'unité') !== false || 
+                      strpos($description_lower, 'pieces') !== false ||
+                      strpos($description_lower, 'pièces') !== false) {
+                $unite = 'pièce';
+            }
+            
+            // Créer le don en nature
+            $donNatureId = $this->donModel->create(
+                'Achat via ' . $don['donateur'], // Donateur = achat
+                $type_article,
+                $description_article . ' (acheté)',
+                $quantite,
+                $unite
+            );
+            
+            // Log pour debug
+            error_log("Achat créé avec succès - Don en nature ID: " . $donNatureId);
+        }
         
         return [
             'success' => $result,

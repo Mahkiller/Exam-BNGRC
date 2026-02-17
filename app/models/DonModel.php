@@ -15,14 +15,19 @@ class DonModel extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    // Ajouter un don
+    // Ajouter un don - MODIFIÉ pour retourner l'ID
     public function create($donateur, $type_don, $description, $quantite, $unite) {
         $stmt = $this->db->prepare("
             INSERT INTO don_BNGRC 
             (donateur, type_don, description, quantite_totale, unite, date_don) 
             VALUES (?, ?, ?, ?, ?, NOW())
         ");
-        return $stmt->execute([$donateur, $type_don, $description, $quantite, $unite]);
+        $result = $stmt->execute([$donateur, $type_don, $description, $quantite, $unite]);
+        
+        if ($result) {
+            return $this->db->lastInsertId(); // Retourne l'ID du don créé
+        }
+        return false;
     }
     
     // Récupérer le stock total par type
@@ -37,7 +42,7 @@ class DonModel extends Model {
         return $result['total'] ?? 0;
     }
     
-    // Récupérer les dons non utilisés (stock disponible)
+    // Récupérer les dons non utilisés (stock disponible) - CORRIGÉ pour inclure les achats
     public function getDonsNonUtilises() {
         $stmt = $this->db->query("
             SELECT d.*,
@@ -86,12 +91,12 @@ class DonModel extends Model {
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
-    // Ajoute après getTotalDons()
-public function getById($id) {
-    $stmt = $this->db->prepare("SELECT * FROM don_BNGRC WHERE id = ?");
-    $stmt->execute([$id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+    // Récupérer un don par ID
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM don_BNGRC WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     
     // Récupérer les stats par type de donateur
     public function getStatsParTypeDonateur() {
