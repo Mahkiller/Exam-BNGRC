@@ -108,8 +108,8 @@
                         <?php foreach ($achats_recents as $achat): ?>
                             <tr>
                                 <td><?= date('d/m/Y H:i', strtotime($achat['date_achat'])) ?></td>
-                                <td><?= htmlspecialchars($achat['description_article']) ?></td>
-                                <td><?= number_format($achat['quantite'], 2) ?></td>
+                                <td><?= htmlspecialchars($achat['nom_produit']) ?></td>
+                                <td><?= number_format($achat['quantite'], 2) ?> <?= htmlspecialchars($achat['unite_mesure']) ?></td>
                                 <td><?= number_format($achat['prix_unitaire_achat'], 0) ?> Ar</td>
                                 <td><strong><?= number_format($achat['montant_total'], 0) ?> Ar</strong></td>
                             </tr>

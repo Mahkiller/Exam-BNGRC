@@ -46,7 +46,7 @@ class DonService {
         return $this->donModel->getTopDonateurs($limit);
     }
     
-    public function ajouterDon($donateur, $type_don, $description, $quantite, $unite) {
+    public function ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id = null) {
         if (empty($donateur) || empty($type_don) || empty($description) || $quantite <= 0 || empty($unite)) {
             return [
                 'success' => false,
@@ -54,7 +54,7 @@ class DonService {
             ];
         }
         
-        $result = $this->donModel->create($donateur, $type_don, $description, $quantite, $unite);
+        $result = $this->donModel->create($donateur, $type_don, $description, $quantite, $unite, $produit_id);
         
         return [
             'success' => $result,
@@ -141,5 +141,31 @@ class DonService {
         }
         
         return $result;
+    }
+    
+    // Récupérer les catégories de produits
+    public function getCategories() {
+        return $this->donModel->getCategories();
+    }
+    
+    // Récupérer les produits
+    public function getProduits() {
+        return $this->donModel->getProduits();
+    }
+    
+    // Récupérer les produits par catégorie
+    public function getProduitsByCategorie($categorie_id) {
+        return $this->donModel->getProduitsByCategorie($categorie_id);
+    }
+    
+    // Récupérer le prix d'un produit
+    public function getPrixProduit($produit_id) {
+        return $this->donModel->getPrixProduit($produit_id);
+    }
+    
+    // Récupérer les infos d'un produit
+    public function getProduitInfo($produit_id) {
+        if (!$produit_id) return null;
+        return $this->donModel->getProduitInfo($produit_id);
     }
 }

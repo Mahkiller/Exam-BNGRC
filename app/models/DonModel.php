@@ -15,14 +15,14 @@ class DonModel extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    // Ajouter un don - MODIFIÉ pour retourner l'ID
-    public function create($donateur, $type_don, $description, $quantite, $unite) {
+    // Ajouter un don - supports produit_id pour dons en nature
+    public function create($donateur, $type_don, $description, $quantite, $unite, $produit_id = null) {
         $stmt = $this->db->prepare("
             INSERT INTO don_BNGRC 
-            (donateur, type_don, description, quantite_totale, unite, date_don) 
-            VALUES (?, ?, ?, ?, ?, NOW())
+            (donateur, type_don, produit_id, description, quantite_totale, unite, date_don) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW())
         ");
-        $result = $stmt->execute([$donateur, $type_don, $description, $quantite, $unite]);
+        $result = $stmt->execute([$donateur, $type_don, $produit_id, $description, $quantite, $unite]);
         
         if ($result) {
             return $this->db->lastInsertId(); // Retourne l'ID du don créé
@@ -126,5 +126,69 @@ class DonModel extends Model {
         $stmt->bindValue(1, (int)$limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les catégories de produits
+    public function getCategories() {
+        $stmt = $this->db->query("
+            SELECT id, nom_categorie, description
+            FROM categorie_produit_BNGRC
+            ORDER BY nom_categorie
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les produits
+    public function getProduits() {
+        $stmt = $this->db->query("
+            SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
+                   p.unite_mesure, p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE c.nom_categorie IN ('nature', 'materiaux')
+            ORDER BY c.nom_categorie, p.nom_produit
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les produits par catégorie
+    public function getProduitsByCategorie($categorie_id) {
+        $stmt = $this->db->prepare("
+            SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
+                   p.unite_mesure, p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE p.categorie_id = ? AND c.nom_categorie IN ('nature', 'materiaux')
+            ORDER BY p.nom_produit
+        ");
+        $stmt->execute([$categorie_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer le prix d'un produit
+    public function getPrixProduit($produit_id) {
+        $stmt = $this->db->prepare("
+            SELECT prix_unitaire_reference, unite_mesure FROM produit_BNGRC
+            WHERE id = ? AND categorie_id IN (SELECT id FROM categorie_produit_BNGRC WHERE nom_categorie IN ('nature', 'materiaux'))
+        ");
+        $stmt->execute([$produit_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?? ['prix_unitaire_reference' => 0, 'unite_mesure' => ''];
+    }
+    
+    // Récupérer les infos complètes d'un produit
+    public function getProduitInfo($produit_id) {
+        $stmt = $this->db->prepare("
+            SELECT p.id, p.nom_produit, p.description, p.unite_mesure, 
+                   p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte, p.categorie_id,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE p.id = ? AND c.nom_categorie IN ('nature', 'materiaux')
+        ");
+        $stmt->execute([$produit_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

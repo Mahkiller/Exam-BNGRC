@@ -83,8 +83,8 @@
                                 <strong><?= htmlspecialchars($achat['nom_ville']) ?></strong>
                             </td>
                             <td><?= htmlspecialchars($achat['besoin_description'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($achat['description_article']) ?></td>
-                            <td><?= number_format($achat['quantite'], 2) ?></td>
+                            <td><?= htmlspecialchars($achat['nom_produit']) ?></td>
+                            <td><?= number_format($achat['quantite'], 2) ?> <?= htmlspecialchars($achat['unite_mesure']) ?></td>
                             <td><?= number_format($achat['prix_unitaire_achat'], 0) ?> Ar</td>
                             <td class="montant-cell">
                                 <strong><?= number_format($achat['montant_total'], 0) ?> Ar</strong>

@@ -120,16 +120,19 @@ class RecapController extends Controller {
         ]);
     }
     
-    // Fonctions utilitaires
+    // Fonctions utilitaires - récupérer le prix d'un produit par besoin
     private function getPrixUnitaire($type_besoin, $description) {
         $db = Database::getInstance();
+        // Chercher d'abord un produit qui correspond à la description
         $stmt = $db->prepare("
-            SELECT prix_unitaire FROM prix_unitaire_BNGRC
-            WHERE type_article = ? AND description = ?
+            SELECT prix_unitaire_reference FROM produit_BNGRC
+            WHERE nom_produit LIKE ? OR description LIKE ?
+            LIMIT 1
         ");
-        $stmt->execute([$type_besoin, $description]);
+        $searchTerm = '%' . $description . '%';
+        $stmt->execute([$searchTerm, $searchTerm]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['prix_unitaire'] ?? 0;
+        return $result['prix_unitaire_reference'] ?? 0;
     }
     
     private function getMontantUtiliseDon($don_id) {

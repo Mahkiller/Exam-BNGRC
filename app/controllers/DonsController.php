@@ -21,16 +21,44 @@ class DonsController extends Controller {
             'stock' => $this->donService->getStockGlobal(),
             'stock_detail' => $this->donService->getStockDetaille(),
             'stats_donateurs' => $stats_donateurs,
-            'top_donateurs' => $this->donService->getTopDonateurs()
+            'top_donateurs' => $this->donService->getTopDonateurs(),
+            'categories' => $this->donService->getCategories(),
+            'produits' => $this->donService->getProduits()
         ];
         $this->view('dons', $data);
     }
     
     public function attribution() {
+        // Obtenir toutes les catégories et produits pour affichage du stock
+        $categories = $this->donService->getCategories();
+        $produits = $this->donService->getProduits();
+        
+        // Récupérer les données d'attribution
+        $besoins = $this->donService->getBesoinsNonSatisfaits();
+        $dons_disponibles = $this->donService->getDonsDisponibles();
+        
+        // Calculer les totaux par catégorie
+        $totaux = [];
+        foreach ($produits as $produit) {
+            $catId = $produit['categorie_id'];
+            if (!isset($totaux[$catId])) {
+                $totaux[$catId] = [
+                    'nom_categorie' => $produit['nom_categorie'],
+                    'total_stock' => 0,
+                    'unite' => ''
+                ];
+            }
+            $totaux[$catId]['total_stock'] += $produit['stock_actuel'];
+            $totaux[$catId]['unite'] = $produit['unite_mesure'];
+        }
+        
         $data = [
-            'besoins_non_satisfaits' => $this->donService->getBesoinsNonSatisfaits(),
+            'besoins_non_satisfaits' => $besoins,
             'stock' => $this->donService->getStockGlobal(),
-            'dons_disponibles' => $this->donService->getDonsDisponibles()
+            'dons_disponibles' => $dons_disponibles,
+            'categories' => $categories,
+            'produits' => $produits,
+            'totaux' => $totaux
         ];
         $this->view('attribution', $data);
     }
@@ -39,11 +67,39 @@ class DonsController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $donateur = $_POST['donateur'];
             $type_don = $_POST['type_don'];
-            $description = $_POST['description'];
-            $quantite = $_POST['quantite'];
-            $unite = $_POST['unite'];
             
-            $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite);
+            if ($type_don === 'argent') {
+                // Don en argent
+                $quantite = $_POST['quantite_argent'] ?? 0;
+                $description = 'Don en argent';
+                $unite = 'Ar';
+                $produit_id = null;
+                
+                $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id);
+            } else if ($type_don === 'produit') {
+                // Don en produit
+                $produit_id = $_POST['produit_id'] ?? null;
+                $quantite = $_POST['quantite_produit'] ?? 0;
+                $categorie_id = $_POST['categorie_id'] ?? null;
+                
+                // Récupérer les infos du produit
+                $produit = $this->donService->getProduitInfo($produit_id);
+                
+                if (!$produit) {
+                    $_SESSION['error'] = 'Produit introuvable';
+                    $this->redirect('dons');
+                    return;
+                }
+                
+                $description = $produit['nom_produit'];
+                $unite = $produit['unite_mesure'];
+                
+                $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id);
+            } else {
+                $_SESSION['error'] = 'Type de don invalide';
+                $this->redirect('dons');
+                return;
+            }
             
             if ($result['success']) {
                 $_SESSION['message'] = 'Don enregistré avec succès';

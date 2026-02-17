@@ -31,29 +31,7 @@
         </div>
     </div>
 
-    <!-- Stock disponible -->
-    <div class="stock-info animate-scale">
-        <h3>Stock disponible</h3>
-        <div class="stock-mini-grid">
-            <span class="stock-badge nature stagger-item">
-                🌾 Riz: <strong><?= $stats['stock_riz'] ?? 0 ?> kg</strong>
-            </span>
-            <span class="stock-badge argent stagger-item">
-                💰 Argent: <strong><?= number_format($stats['stock_argent'] ?? 0) ?> Ar</strong>
-            </span>
-            <span class="stock-badge materiaux stagger-item">
-                🔨 Tôles: <strong><?= $stats['stock_toles'] ?? 0 ?> unités</strong>
-            </span>
-        </div>
-    </div>
 
-    <!-- Sous-menu rapide -->
-    <div class="quick-menu">
-        <a href="<?= BASE_URL ?>/statistiques" class="quick-link stagger-item">📊 Statistiques</a>
-        <a href="<?= BASE_URL ?>/parametres" class="quick-link stagger-item">⚙️ Paramètres</a>
-        <a href="#" class="quick-link stagger-item">❓ Aide</a>
-        <a href="#" class="quick-link stagger-item">💬 Feedback</a>
-    </div>
 
     <h2 class="animate-slide-top" style="animation-delay: 0.2s;">Situation par ville</h2>
 
@@ -90,6 +68,14 @@
                     <?php if ($ville['urgent']): ?>
                         <span class="urgence-badge">🔴 Urgent</span>
                     <?php endif; ?>
+                </div>
+                <div class="card-image">
+                    <?php 
+                    // Générer le chemin de l'image en basculant le nom de ville en minuscules
+                    $ville_slug = strtolower(str_replace(' ', '-', $ville['nom']));
+                    $image_path = BASE_URL . '/assets/image/' . $ville_slug . '.jpg';
+                    ?>
+                    <img src="<?= $image_path ?>" alt="Photo de <?= htmlspecialchars($ville['nom']) ?>" onerror="this.style.display='none'">
                 </div>
                 <div class="card-body">
                     <?php 

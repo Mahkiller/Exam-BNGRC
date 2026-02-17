@@ -5,29 +5,85 @@
 <h1 class="animate-slide-top">🔄 Attribution des dons aux besoins</h1>
 
 <div class="stock-warning animate-scale">
-    <h3>Stock disponible</h3>
-    <div class="stock-mini-grid">
-        <span class="stock-badge nature stagger-item">
-            🌾 Nature: <strong><?= $stock['nature'] ?? 0 ?></strong>
-        </span>
-        <span class="stock-badge materiaux stagger-item">
-            🔨 Matériaux: <strong><?= $stock['materiaux'] ?? 0 ?></strong>
-        </span>
-        <span class="stock-badge argent stagger-item">
-            💰 Argent: <strong><?= number_format($stock['argent'] ?? 0) ?> Ar</strong>
-        </span>
+    <h3>Stock disponible par catégorie</h3>
+    <div class="stock-summary-grid">
+        <?php foreach ($totaux as $catId => $total): ?>
+        <div class="stock-summary-card stagger-item">
+            <div class="category-icon">
+                <?php 
+                    $icon = match($total['nom_categorie']) {
+                        'nature' => '🌾',
+                        'materiaux' => '🔨',
+                        'argent' => '💰',
+                        default => '📦'
+                    };
+                    echo $icon;
+                ?>
+            </div>
+            <div class="category-info">
+                <h4><?= htmlspecialchars($total['nom_categorie']) ?></h4>
+                <p class="stock-value">
+                    <?php 
+                        if ($total['nom_categorie'] === 'argent') {
+                            echo number_format($total['total_stock']) . ' Ar';
+                        } else {
+                            echo number_format($total['total_stock'], 2) . ' ' . $total['unite'];
+                        }
+                    ?>
+                </p>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
-    <p class="rule-note animate-fade">⚠️ Règle: La quantité donnée ne doit pas dépasser le stock disponible</p>
+    <p class="rule-note animate-fade">⚠️ Règle: L'attribution doit respecter le stock disponible</p>
 </div>
 
-<h2 class="animate-slide-top" style="animation-delay: 0.2s;">Besoins non satisfaits</h2>
+<!-- Détail du stock par produit -->
+<h2 class="animate-slide-top" style="animation-delay: 0.2s;">Détail du stock disponible</h2>
+<table class="table animate-slide-bottom">
+    <thead>
+        <tr>
+            <th>Catégorie</th>
+            <th>Produit</th>
+            <th>Stock</th>
+            <th>Unité</th>
+            <th>Alerte</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($produits as $produit): 
+            $status = $produit['stock_actuel'] > $produit['seuil_alerte'] ? 'OK' : 'ALERTE';
+            $statusClass = $status === 'OK' ? 'ok' : 'alerte';
+        ?>
+        <tr class="stagger-item">
+            <td><?= htmlspecialchars($produit['nom_categorie']) ?></td>
+            <td><?= htmlspecialchars($produit['nom_produit']) ?></td>
+            <td><?= number_format($produit['stock_actuel'], 2) ?></td>
+            <td><?= htmlspecialchars($produit['unite_mesure']) ?></td>
+            <td><?= number_format($produit['seuil_alerte'], 2) ?></td>
+            <td>
+                <span class="badge <?= $statusClass ?>">
+                    <?php if ($status === 'OK'): ?>
+                        ✅ OK
+                    <?php else: ?>
+                        ⚠️ ALERTE
+                    <?php endif; ?>
+                </span>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2 class="animate-slide-top" style="animation-delay: 0.3s;">Besoins non satisfaits</h2>
 <table class="table animate-slide-bottom" id="attribution-table">
     <thead>
         <tr>
             <th>Ville</th>
             <th>Besoin</th>
             <th>Type</th>
-            <th>Quantité</th>
+            <th>Quantité démanée</th>
             <th>Attribué</th>
             <th>Reste</th>
             <th>Urgence</th>
@@ -39,17 +95,17 @@
             $urgenceClass = $besoin['niveau_urgence'];
         ?>
         <tr class="stagger-item <?= $urgenceClass ?>">
-            <td><?= $besoin['nom_ville'] ?></td>
-            <td><?= $besoin['description'] ?></td>
-            <td><?= $besoin['type_besoin'] ?></td>
-            <td><?= $besoin['quantite_demandee'] ?> <?= $besoin['unite'] ?></td>
-            <td><?= $besoin['attribue'] ?> <?= $besoin['unite'] ?></td>
-            <td class="reste" data-type="<?= $besoin['type_besoin'] ?>">
-                <strong><?= $besoin['reste'] ?> <?= $besoin['unite'] ?></strong>
+            <td><?= htmlspecialchars($besoin['nom_ville'] ?? '') ?></td>
+            <td><?= htmlspecialchars($besoin['description'] ?? '') ?></td>
+            <td><?= htmlspecialchars($besoin['type_besoin'] ?? '') ?></td>
+            <td><?= number_format($besoin['quantite_demandee'] ?? 0, 2) ?> <?= htmlspecialchars($besoin['unite'] ?? '') ?></td>
+            <td><?= number_format($besoin['attribue'] ?? 0, 2) ?> <?= htmlspecialchars($besoin['unite'] ?? '') ?></td>
+            <td class="reste" data-type="<?= htmlspecialchars($besoin['type_besoin'] ?? '') ?>">
+                <strong><?= number_format($besoin['reste'] ?? 0, 2) ?> <?= htmlspecialchars($besoin['unite'] ?? '') ?></strong>
             </td>
             <td>
-                <span class="badge <?= $urgenceClass ?>">
-                    <?= strtoupper($besoin['niveau_urgence']) ?>
+                <span class="badge <?= htmlspecialchars($urgenceClass) ?>">
+                    <?= strtoupper($urgenceClass) ?>
                 </span>
             </td>
             <td>
@@ -61,9 +117,9 @@
                 </select>
                 <button class="btn-attribuer animate-bounce" 
                         data-besoin-id="<?= $besoin['id'] ?>"
-                        data-type="<?= $besoin['type_besoin'] ?>"
+                        data-type="<?= htmlspecialchars($besoin['type_besoin'] ?? '') ?>"
                         data-max="<?= $besoin['reste'] ?>"
-                        data-unite="<?= $besoin['unite'] ?>">
+                        data-unite="<?= htmlspecialchars($besoin['unite'] ?? '') ?>">
                     Attribuer
                 </button>
                 <span class="error-message" style="color: red; display: none;"></span>

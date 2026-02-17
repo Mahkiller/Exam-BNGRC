@@ -40,21 +40,18 @@
                 </select>
             </div>
 
-            <!-- Description de l'article -->
+            <!-- Sélection du produit -->
             <div class="form-group">
-                <label for="description_article">Description de l'article *</label>
-                <input type="text" name="description_article" id="description_article" 
-                       placeholder="ex: Sacs de riz, Tôles, etc." 
-                       required class="form-control"
-                       list="articles-list">
-                <datalist id="articles-list">
-                    <?php foreach ($prix_unitaires as $prix): ?>
-                        <option value="<?= htmlspecialchars($prix['description']) ?>">
-                            <?= htmlspecialchars($prix['description']) ?> 
-                            (<?= number_format($prix['prix_unitaire']) ?> Ar/<?= $prix['unite'] ?? 'unité' ?>)
+                <label for="produit_id">Produit à acheter *</label>
+                <select name="produit_id" id="produit_id" required class="form-control">
+                    <option value="">-- Sélectionnez un produit --</option>
+                    <?php foreach ($produits as $produit): ?>
+                        <option value="<?= $produit['id'] ?>" data-prix="<?= $produit['prix_unitaire_reference'] ?>" data-unite="<?= $produit['unite_mesure'] ?>">
+                            <?= htmlspecialchars($produit['nom_produit']) ?> 
+                            (<?= number_format($produit['prix_unitaire_reference']) ?> Ar/<?= $produit['unite_mesure'] ?>)
                         </option>
                     <?php endforeach; ?>
-                </datalist>
+                </select>
             </div>
 
             <!-- Quantité et Prix Unitaire -->
@@ -88,25 +85,25 @@
         </form>
     </div>
 
-    <!-- Liste des prix unitaires pour référence -->
+    <!-- Liste des produits pour référence -->
     <div class="prix-reference">
-        <h3>📋 Prix unitaires de référence</h3>
+        <h3>📋 Catalogue des produits</h3>
         <table class="prix-table">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Article</th>
+                    <th>Catégorie</th>
+                    <th>Produit</th>
                     <th>Prix unitaire</th>
                     <th>Unité</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($prix_unitaires as $prix): ?>
+                <?php foreach ($produits as $produit): ?>
                 <tr>
-                    <td><?= htmlspecialchars($prix['type_article']) ?></td>
-                    <td><?= htmlspecialchars($prix['description']) ?></td>
-                    <td><?= number_format($prix['prix_unitaire']) ?> Ar</td>
-                    <td><?= htmlspecialchars($prix['unite'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($produit['nom_categorie']) ?></td>
+                    <td><?= htmlspecialchars($produit['nom_produit']) ?></td>
+                    <td><?= number_format($produit['prix_unitaire_reference']) ?> Ar</td>
+                    <td><?= htmlspecialchars($produit['unite_mesure']) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -274,6 +271,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const produitSelect = document.getElementById('produit_id');
     const quantiteInput = document.getElementById('quantite');
     const prixInput = document.getElementById('prix_unitaire');
     const totalDisplay = document.getElementById('total-display');
@@ -286,20 +284,19 @@ document.addEventListener('DOMContentLoaded', function() {
         totalDisplay.textContent = new Intl.NumberFormat('fr-FR').format(total) + ' Ar';
     }
     
-    quantiteInput.addEventListener('input', updateTotal);
-    prixInput.addEventListener('input', updateTotal);
-    
-    // Datalist pour auto-remplir le prix
-    const descriptionInput = document.getElementById('description_article');
-    const prixReference = <?= json_encode($prix_unitaires) ?>;
-    
-    descriptionInput.addEventListener('change', function() {
-        const description = this.value;
-        const found = prixReference.find(p => p.description === description);
-        if (found && found.prix_unitaire) {
-            prixInput.value = found.prix_unitaire;
+    // Quand un produit est sélectionné, auto-remplir le prix
+    produitSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const prix = selectedOption.getAttribute('data-prix');
+        const unite = selectedOption.getAttribute('data-unite');
+        
+        if (prix) {
+            prixInput.value = prix;
             updateTotal();
         }
     });
+    
+    quantiteInput.addEventListener('input', updateTotal);
+    prixInput.addEventListener('input', updateTotal);
 });
 </script>

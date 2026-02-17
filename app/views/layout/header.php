@@ -30,13 +30,8 @@
                 <div class="nav-section">
                     <div class="nav-section-title">GESTION</div>
                     <a href="<?= BASE_URL ?>/achats" class="nav-item">🛒 Achats</a>
+                    <a href="<?= BASE_URL ?>/stock" class="nav-item">📦 Stock</a>
                     <a href="<?= BASE_URL ?>/recap" class="nav-item">📈 Récapitulatif</a>
-                    <a href="<?= BASE_URL ?>/parametres" class="nav-item">⚙️ Paramètres</a>
-                </div>
-                
-                <div class="nav-section">
-                    <a href="#" class="nav-item">❓ Aide</a>
-                    <a href="#" class="nav-item">💬 Feedback</a>
                 </div>
             </nav>
             

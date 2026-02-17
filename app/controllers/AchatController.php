@@ -39,14 +39,19 @@ class AchatController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $don_id = $_POST['don_id'] ?? null;
             $besoin_id = $_POST['besoin_id'] ?? null;
-            $description_article = $_POST['description_article'] ?? '';
+            $produit_id = $_POST['produit_id'] ?? null;
             $quantite = $_POST['quantite'] ?? 0;
             $prix_unitaire = $_POST['prix_unitaire'] ?? 0;
+            
+            // Si le prix n'est pas fourni, le récupérer de la base
+            if (!$prix_unitaire && $produit_id) {
+                $prix_unitaire = $this->achatService->getPrixProduit($produit_id);
+            }
             
             $result = $this->achatService->creerAchat(
                 $don_id, 
                 $besoin_id, 
-                $description_article, 
+                $produit_id, 
                 $quantite, 
                 $prix_unitaire
             );
@@ -65,7 +70,7 @@ class AchatController extends Controller {
                 return $d['type_don'] === 'argent';
             }),
             'besoins' => $this->besoinService->getAllBesoins(),
-            'prix_unitaires' => $this->achatService->getPrixUnitaires()
+            'produits' => $this->achatService->getProduits()
         ];
         
         $this->view('achat_form', $data);

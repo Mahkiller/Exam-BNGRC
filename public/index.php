@@ -117,6 +117,12 @@ Flight::route('/recap/actualiser', function () {
     return $controller->actualiser();
 });
 
+// Routes Stock
+Flight::route('/stock', function () {
+    $controller = new StockController();
+    return $controller->index();
+});
+
 // 404 Handler
 Flight::map('notFound', function() {
     http_response_code(404);

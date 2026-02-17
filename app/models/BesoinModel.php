@@ -43,13 +43,13 @@ class BesoinModel extends Model {
     }
     
     // Ajouter un besoin
-    public function create($ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence) {
+    public function create($ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence, $produit_id = null) {
         $stmt = $this->db->prepare("
             INSERT INTO besoin_BNGRC 
-            (ville_id, type_besoin, description, quantite_demandee, unite, niveau_urgence, date_besoin) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW())
+            (ville_id, type_besoin, description, quantite_demandee, unite, niveau_urgence, produit_id, date_besoin) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
         ");
-        return $stmt->execute([$ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence]);
+        return $stmt->execute([$ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence, $produit_id]);
     }
     
     // Récupérer le total attribué par type
@@ -151,5 +151,58 @@ class BesoinModel extends Model {
         $stmt->bindValue(1, (int)$limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les catégories de produits
+    public function getCategories() {
+        $stmt = $this->db->query("
+            SELECT id, nom_categorie, description
+            FROM categorie_produit_BNGRC
+            ORDER BY nom_categorie
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les produits
+    public function getProduits() {
+        $stmt = $this->db->query("
+            SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
+                   p.unite_mesure, p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE c.nom_categorie IN ('nature', 'materiaux')
+            ORDER BY c.nom_categorie, p.nom_produit
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les produits par catégorie
+    public function getProduitsByCategorie($categorie_id) {
+        $stmt = $this->db->prepare("
+            SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
+                   p.unite_mesure, p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE p.categorie_id = ? AND c.nom_categorie IN ('nature', 'materiaux')
+            ORDER BY p.nom_produit
+        ");
+        $stmt->execute([$categorie_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Récupérer les infos complètes d'un produit
+    public function getProduitInfo($produit_id) {
+        $stmt = $this->db->prepare("
+            SELECT p.id, p.nom_produit, p.description, p.unite_mesure, 
+                   p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte, p.categorie_id,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE p.id = ? AND c.nom_categorie IN ('nature', 'materiaux')
+        ");
+        $stmt->execute([$produit_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
