@@ -1,12 +1,9 @@
 <?php
-// app/views/stock.php
 ?>
-
 <div class="stock-container">
     <div class="header-section">
         <h1 class="animate-slide-top">📦 Gestion du Stock</h1>
     </div>
-
     <!-- Filtre par catégorie -->
     <div class="filter-section">
         <form method="GET" action="<?= BASE_URL ?>/stock" class="filter-form">
@@ -21,7 +18,6 @@
             </select>
         </form>
     </div>
-
     <!-- Résumé par catégorie -->
     <div class="stock-summary">
         <h2>📊 Résumé par Catégorie</h2>
@@ -42,7 +38,6 @@
             <?php endforeach; ?>
         </div>
     </div>
-
     <!-- Tableau détaillé du stock -->
     <div class="stock-details">
         <h2>📋 Détails du Stock</h2>
@@ -82,30 +77,25 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-        
         <?php if (empty($produits)): ?>
             <p class="no-data">Aucun produit dans cette catégorie</p>
         <?php endif; ?>
     </div>
 </div>
-
 <style>
 .stock-container {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
-
 .header-section {
     margin-bottom: 30px;
 }
-
 .header-section h1 {
-    color: #333;
+    color: 
     font-size: 2rem;
     margin: 0;
 }
-
 .filter-section {
     margin-bottom: 25px;
     background: white;
@@ -113,153 +103,128 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .filter-form {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-
 .filter-form label {
     font-weight: 600;
-    color: #333;
+    color: 
 }
-
 .filter-form select {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid 
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
 }
-
 .stock-summary {
     margin-bottom: 30px;
 }
-
 .stock-summary h2 {
-    color: #333;
+    color: 
     margin-bottom: 15px;
     font-size: 1.3rem;
 }
-
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
 }
-
 .summary-card {
     background: white;
-    border-left: 4px solid #c62828;
+    border-left: 4px solid 
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
 }
-
 .category-name {
     font-weight: 600;
-    color: #666;
+    color: 
     font-size: 14px;
     text-transform: uppercase;
     margin-bottom: 10px;
 }
-
 .category-total {
     font-size: 18px;
     font-weight: 700;
-    color: #c62828;
+    color: 
 }
-
 .stock-details {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
-
 .stock-details h2 {
-    color: #333;
+    color: 
     margin-bottom: 20px;
     font-size: 1.3rem;
 }
-
 .stock-table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .stock-table thead {
-    background: #f5f5f5;
-    border-bottom: 2px solid #ddd;
+    background: 
+    border-bottom: 2px solid 
 }
-
 .stock-table th {
     padding: 12px;
     text-align: left;
     font-weight: 600;
-    color: #333;
+    color: 
     font-size: 13px;
 }
-
 .stock-table td {
     padding: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid 
     font-size: 13px;
 }
-
 .stock-table tbody tr:hover {
-    background: #f9f9f9;
+    background: 
 }
-
 .stock-value {
-    color: #c62828;
+    color: 
     font-weight: bold;
 }
-
 .badge {
     display: inline-block;
     padding: 4px 8px;
-    background: #f0f0f0;
+    background: 
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
-    color: #666;
+    color: 
 }
-
 .status {
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
 }
-
 .status.ok {
-    background: #e8f5e9;
-    color: #2e7d32;
+    background: 
+    color: 
 }
-
 .status.warning {
-    background: #fff3e0;
-    color: #e65100;
+    background: 
+    color: 
 }
-
 .no-data {
     text-align: center;
-    color: #999;
+    color: 
     padding: 40px;
 }
-
 @media (max-width: 768px) {
     .summary-grid {
         grid-template-columns: 1fr;
     }
-    
     .stock-table {
         font-size: 12px;
     }
-    
     .stock-table th,
     .stock-table td {
         padding: 8px;

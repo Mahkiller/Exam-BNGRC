@@ -1,7 +1,5 @@
 <?php
 class DonModel extends Model {
-    
-    // Récupérer tous les dons
     public function getAll() {
         $stmt = $this->db->query("
             SELECT d.*, 
@@ -19,61 +17,41 @@ class DonModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Ajouter un don (VERSION CORRIGÉE)
     public function create($donateur, $type_don, $description, $quantite, $unite, $produit_id = null) {
         try {
-            // Vérifier que la connexion est bonne
-            if (!$this->db) {
-                throw new Exception("Connexion base de données perdue");
-            }
-            
-            // Pour les dons en argent, produit_id doit être NULL
             if ($type_don === 'argent') {
                 $produit_id = null;
             }
-            
-            $stmt = $this->db->prepare("
-                INSERT INTO don_BNGRC 
-                (donateur, type_don, produit_id, description, quantite_totale, unite, date_don) 
-                VALUES (?, ?, ?, ?, ?, ?, NOW())
-            ");
-            
+            $sql = "INSERT INTO don_BNGRC 
+                    (donateur, type_don, produit_id, description, quantite_totale, unite, date_don, protege) 
+                    VALUES (?, ?, ?, ?, ?, ?, NOW(), 0)";
+            $stmt = $this->db->prepare($sql);
             $params = [$donateur, $type_don, $produit_id, $description, $quantite, $unite];
             $result = $stmt->execute($params);
-            
             if ($result) {
                 $don_id = $this->db->lastInsertId();
-                
-                // Si c'est un don en produit, mettre à jour le stock
                 if ($type_don !== 'argent' && $produit_id) {
-                    // Vérifier que le produit existe
                     $check = $this->db->prepare("SELECT id FROM produit_BNGRC WHERE id = ?");
                     $check->execute([$produit_id]);
                     if ($check->rowCount() > 0) {
                         $stmt = $this->db->prepare("UPDATE produit_BNGRC SET stock_actuel = stock_actuel + ? WHERE id = ?");
                         $stmt->execute([$quantite, $produit_id]);
-                        
-                        // Enregistrer le mouvement de stock
                         $stmt = $this->db->prepare("
-                            INSERT INTO mouvement_stock_BNGRC (produit_id, type_mouvement, quantite, source_type, source_id, date_mouvement)
+                            INSERT INTO mouvement_stock_BNGRC 
+                            (produit_id, type_mouvement, quantite, source_type, source_id, date_mouvement)
                             VALUES (?, 'entree', ?, 'don', ?, NOW())
                         ");
                         $stmt->execute([$produit_id, $quantite, $don_id]);
                     }
                 }
-                
                 return $don_id;
             }
             return false;
-            
         } catch (PDOException $e) {
             error_log("Erreur PDO dans create don: " . $e->getMessage());
             throw new Exception("Erreur base de données: " . $e->getMessage());
         }
     }
-    
-    // Récupérer le stock total par type
     public function getStockTotal($type_don) {
         if ($type_don === 'argent') {
             $stmt = $this->db->prepare("
@@ -85,7 +63,6 @@ class DonModel extends Model {
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['total'] ?? 0;
         } else {
-            // Pour nature et materiaux, prendre le stock_actuel des produits
             $categorie_id = ($type_don === 'nature') ? 1 : 2;
             $stmt = $this->db->prepare("
                 SELECT SUM(stock_actuel) as total 
@@ -97,8 +74,6 @@ class DonModel extends Model {
             return $result['total'] ?? 0;
         }
     }
-    
-    // Récupérer les dons non utilisés
     public function getDonsNonUtilises() {
         $stmt = $this->db->query("
             SELECT d.*,
@@ -112,8 +87,6 @@ class DonModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Attribuer un don à un besoin
     public function attribuer($besoin_id, $don_id, $quantite) {
         $stmt = $this->db->prepare("
             INSERT INTO attribution_BNGRC 
@@ -122,14 +95,10 @@ class DonModel extends Model {
         ");
         return $stmt->execute([$besoin_id, $don_id, $quantite]);
     }
-    
-    // Récupérer les besoins non satisfaits
     public function getBesoinsNonSatisfaits() {
         $besoinModel = new BesoinModel();
         return $besoinModel->getNonSatisfaits();
     }
-    
-    // Récupérer les dons récents
     public function getDonsRecents($limit) {
         $stmt = $this->db->prepare("
             SELECT d.*, p.nom_produit
@@ -142,21 +111,15 @@ class DonModel extends Model {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Compter le total des dons
     public function getTotalDons() {
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM don_BNGRC");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
-
-    // Récupérer un don par ID
     public function getById($id) {
         $stmt = $this->db->prepare("SELECT * FROM don_BNGRC WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les stats par type de donateur
     public function getStatsParTypeDonateur() {
         $stmt = $this->db->query("
             SELECT 
@@ -171,8 +134,6 @@ class DonModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer le top donateurs
     public function getTopDonateurs($limit = 5) {
         $stmt = $this->db->prepare("
             SELECT donateur, SUM(quantite_totale) as total_donne
@@ -185,8 +146,6 @@ class DonModel extends Model {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les catégories de produits
     public function getCategories() {
         $stmt = $this->db->query("
             SELECT id, nom_categorie, description
@@ -195,8 +154,6 @@ class DonModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les produits
     public function getProduits() {
         $stmt = $this->db->query("
             SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
@@ -209,8 +166,19 @@ class DonModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer le prix d'un produit
+    public function getProduitsByCategorie($categorie_id) {
+        $stmt = $this->db->prepare("
+            SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
+                   p.unite_mesure, p.prix_unitaire_reference, p.stock_actuel, p.seuil_alerte,
+                   c.nom_categorie
+            FROM produit_BNGRC p
+            JOIN categorie_produit_BNGRC c ON p.categorie_id = c.id
+            WHERE p.categorie_id = ? AND c.nom_categorie IN ('nature', 'materiel')
+            ORDER BY p.nom_produit
+        ");
+        $stmt->execute([$categorie_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getPrixProduit($produit_id) {
         $stmt = $this->db->prepare("
             SELECT prix_unitaire_reference, unite_mesure FROM produit_BNGRC
@@ -220,8 +188,6 @@ class DonModel extends Model {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?? ['prix_unitaire_reference' => 0, 'unite_mesure' => ''];
     }
-    
-    // Récupérer les infos complètes d'un produit
     public function getProduitInfo($produit_id) {
         if (!$produit_id) return null;
         $stmt = $this->db->prepare("
@@ -234,5 +200,9 @@ class DonModel extends Model {
         ");
         $stmt->execute([$produit_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getDonsProteges() {
+        $stmt = $this->db->query("SELECT id FROM don_BNGRC WHERE protege = 1");
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 }

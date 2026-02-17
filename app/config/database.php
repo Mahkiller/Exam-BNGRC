@@ -2,12 +2,10 @@
 class Database {
     private static $instance = null;
     private $connection;
-    
     private $host = 'localhost';
-    private $dbname = 'ETU004082_4338_4433';  // Nom de ta base (en majuscule)
+    private $dbname = 'ETU004082_4338_4433';  
     private $username = 'root';
     private $password = '';
-    
     private function __construct() {
         try {
             $this->connection = new PDO(
@@ -20,7 +18,6 @@ class Database {
             die("Erreur de connexion : " . $e->getMessage());
         }
     }
-    
     public static function getInstance() {
         if (self::$instance === null) {
             self::$instance = new self();

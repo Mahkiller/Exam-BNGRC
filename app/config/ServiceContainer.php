@@ -1,9 +1,6 @@
 <?php
-// app/config/ServiceContainer.php
-
 class ServiceContainer {
     private static $instances = [];
-    
     public static function getStockService() {
         if (!isset(self::$instances['stock'])) {
             $donModel = new DonModel();
@@ -12,7 +9,6 @@ class ServiceContainer {
         }
         return self::$instances['stock'];
     }
-    
     public static function getValidationService() {
         if (!isset(self::$instances['validation'])) {
             self::$instances['validation'] = new ValidationService(
@@ -21,7 +17,6 @@ class ServiceContainer {
         }
         return self::$instances['validation'];
     }
-    
     public static function getBesoinService() {
         if (!isset(self::$instances['besoin'])) {
             $besoinModel = new BesoinModel();
@@ -32,7 +27,6 @@ class ServiceContainer {
         }
         return self::$instances['besoin'];
     }
-    
     public static function getDonService() {
         if (!isset(self::$instances['don'])) {
             $donModel = new DonModel();
@@ -44,7 +38,6 @@ class ServiceContainer {
         }
         return self::$instances['don'];
     }
-    
     public static function getAchatService() {
         if (!isset(self::$instances['achat'])) {
             $achatModel = new AchatModel();
@@ -58,7 +51,6 @@ class ServiceContainer {
         }
         return self::$instances['achat'];
     }
-    
     public static function getVenteService() {
         if (!isset(self::$instances['vente'])) {
             $venteModel = new VenteModel();
@@ -69,10 +61,9 @@ class ServiceContainer {
         }
         return self::$instances['vente'];
     }
-    
     public static function getResetService() {
         if (!isset(self::$instances['reset'])) {
-            self::$instances['reset'] = new ResetService();
+            self::$instances['reset'] = new ResetController();
         }
         return self::$instances['reset'];
     }

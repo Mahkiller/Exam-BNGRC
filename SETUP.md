@@ -14,10 +14,10 @@ composer install
 
 ## Configuration Base de Données
 
-1. Créer une base de données MySQL nommée `BNGRC`
+1. Créer une base de données MySQL nommée `ETU004082_4338_4433`
 2. Importer le schéma :
    ```bash
-   mysql -u root -p BNGRC < database/base.sql
+   mysql -u root -p ETU004082_4338_4433 < database/base.sql
    ```
 3. Adapter les identifiants dans [app/config/database.php](app/config/database.php) si nécessaire
 

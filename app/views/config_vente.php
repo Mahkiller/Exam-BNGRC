@@ -1,5 +1,4 @@
 <?php include 'layout/header.php'; ?>
-
 <div class="content-wrapper">
     <!-- Alerts -->
     <?php if (!empty($data['success_message'])): ?>
@@ -7,13 +6,11 @@
             <strong>✓ Succès!</strong> <?php echo htmlspecialchars($data['success_message']); ?>
         </div>
     <?php endif; ?>
-    
     <?php if (!empty($data['error_message'])): ?>
         <div class="alert error animate-slide-top">
             <strong>✗ Erreur!</strong> <?php echo htmlspecialchars($data['error_message']); ?>
         </div>
     <?php endif; ?>
-    
     <!-- Header -->
     <div class="row mb-5 animate-slide-top">
         <div class="col-md-6">
@@ -26,7 +23,6 @@
             </a>
         </div>
     </div>
-    
     <!-- Formulaire de configuration -->
     <div class="row">
         <div class="col-lg-8">
@@ -52,7 +48,6 @@
                                     <p class="text-muted small">
                                         <?php echo htmlspecialchars($config['description']); ?>
                                     </p>
-                                    
                                     <div class="input-group">
                                         <input type="number" class="form-control" 
                                                name="config_<?php echo $config['param_key']; ?>"
@@ -61,7 +56,6 @@
                                                required>
                                         <span class="input-group-text">%</span>
                                     </div>
-                                    
                                     <!-- Exemple de calcul -->
                                     <div class="mt-3 p-2 bg-white rounded border">
                                         <small class="text-muted">
@@ -85,7 +79,6 @@
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    
                     <div class="mt-4 pt-4 border-top">
                         <h6>ℹ️ Explanation</h6>
                         <ul class="text-muted small">
@@ -94,7 +87,6 @@
                             <li><strong>TVA:</strong> Taxe éventuellement applicable (réservé pour évolutions futures)</li>
                         </ul>
                     </div>
-                    
                     <div class="mt-4">
                         <button type="submit" class="btn-primary w-100 stagger-item">
                             ✓ Enregistrer Configuration
@@ -103,7 +95,6 @@
                 </form>
             </div>
         </div>
-        
         <!-- Info laterale -->
         <div class="col-lg-4">
             <div class="stock-info animate-slide-left">
@@ -113,7 +104,6 @@
                     <p class="text-muted">
                         Quand on vend un don, on applique un taux de réduction pour simuler une vente à un prix inférieur au prix de référence.
                     </p>
-                    
                     <div class="example p-2 bg-white rounded border mb-3">
                         <p><strong>Exemple avec 10% de dépréciation:</strong></p>
                         <ul class="mb-0 small">
@@ -122,9 +112,7 @@
                             <li>Prix de vente: 4 500 000 Ar</li>
                         </ul>
                     </div>
-                    
                     <hr>
-                    
                     <h6>Cas d'Usage</h6>
                     <ul class="text-muted small">
                         <li>✓ Vendre les dons excédentaires</li>
@@ -134,7 +122,6 @@
                     </ul>
                 </div>
             </div>
-            
             <div class="stock-info mt-3 animate-slide-left">
                 <h2>⚠️ Restrictions</h2>
                 <div class="bg-light p-3 rounded">
@@ -153,5 +140,4 @@
         </div>
     </div>
 </div>
-
 <?php include 'layout/footer.php'; ?>

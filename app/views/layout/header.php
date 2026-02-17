@@ -18,7 +18,6 @@
                 <div class="logo">BNGRC</div>
                 <div class="logo-sub">Gestion des sinistrés</div>
             </div>
-            
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <a href="<?= BASE_URL ?>/dashboard" class="nav-item">📊 Tableau de bord</a>
@@ -26,7 +25,6 @@
                     <a href="<?= BASE_URL ?>/dons" class="nav-item">📦 Dons reçus</a>
                     <a href="<?= BASE_URL ?>/attribution" class="nav-item">🔄 Attribution</a>
                 </div>
-                
                 <div class="nav-section">
                     <div class="nav-section-title">GESTION</div>
                     <a href="<?= BASE_URL ?>/achats" class="nav-item">🛒 Achats</a>
@@ -35,7 +33,6 @@
                     <a href="<?= BASE_URL ?>/recap" class="nav-item">📈 Récapitulatif</a>
                 </div>
             </nav>
-            
             <div class="sidebar-footer">
                 <div class="user-info">
                     <span class="user-icon">👤</span>
@@ -43,7 +40,6 @@
                 </div>
             </div>
         </aside>
-
         <!-- CONTENU PRINCIPAL -->
         <main class="main-content">
             <div class="content-wrapper">
@@ -51,7 +47,6 @@
                     <div class="alert success"><?= $_SESSION['message'] ?></div>
                     <?php unset($_SESSION['message']); ?>
                 <?php endif; ?>
-                
                 <?php if (isset($_SESSION['error'])): ?>
                     <div class="alert error"><?= $_SESSION['error'] ?></div>
                     <?php unset($_SESSION['error']); ?>

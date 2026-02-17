@@ -1,9 +1,6 @@
 <?php
-// NE PAS METTRE DOCTYPE HTML ICI !
 ?>
-
 <h1 class="animate-slide-top">🔄 Attribution des dons aux besoins</h1>
-
 <div class="stock-warning animate-scale">
     <h3>Stock disponible par catégorie</h3>
     <div class="stock-summary-grid">
@@ -37,7 +34,6 @@
     </div>
     <p class="rule-note animate-fade">⚠️ Règle: L'attribution doit respecter le stock disponible</p>
 </div>
-
 <!-- Détail du stock par produit -->
 <h2 class="animate-slide-top" style="animation-delay: 0.2s;">Détail du stock disponible</h2>
 <table class="table animate-slide-bottom">
@@ -75,7 +71,6 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
 <h2 class="animate-slide-top" style="animation-delay: 0.3s;">Besoins non satisfaits</h2>
 <table class="table animate-slide-bottom" id="attribution-table">
     <thead>

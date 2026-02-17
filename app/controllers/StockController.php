@@ -3,24 +3,17 @@ class StockController extends Controller {
     private $achatModel;
     private $donModel;
     private $besoinModel;
-    
     public function __construct() {
         $this->achatModel = new AchatModel();
         $this->donModel = new DonModel();
         $this->besoinModel = new BesoinModel();
     }
-
-    // Afficher l'inventaire du stock
     public function index() {
         $categorie_id = $_GET['categorie_id'] ?? null;
-        
-        // Récupérer toutes les catégories
         $stmt = Database::getInstance()->query("
             SELECT * FROM categorie_produit_BNGRC ORDER BY nom_categorie
         ");
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Récupérer les produits (filtrés par catégorie si nécessaire)
         $produits = [];
         if ($categorie_id) {
             $stmt = Database::getInstance()->prepare("
@@ -41,8 +34,6 @@ class StockController extends Controller {
             ");
             $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        
-        // Calculer les totaux par catégorie
         $totaux = [];
         foreach ($categories as $cat) {
             $stmt = Database::getInstance()->prepare("
@@ -52,14 +43,12 @@ class StockController extends Controller {
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $totaux[$cat['id']] = $result['total'] ?? 0;
         }
-        
         $data = [
             'categories' => $categories,
             'produits' => $produits,
             'totaux' => $totaux,
             'categorie_id' => $categorie_id
         ];
-        
         $this->view('stock', $data);
     }
 }

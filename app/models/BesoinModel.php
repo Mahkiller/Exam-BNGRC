@@ -1,7 +1,5 @@
 <?php
 class BesoinModel extends Model {
-    
-    // Récupérer tous les besoins avec infos ville
     public function getAll() {
         $stmt = $this->db->query("
             SELECT b.*, v.nom_ville, v.region,
@@ -16,15 +14,11 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer un besoin par ID
     public function getById($id) {
         $stmt = $this->db->prepare("SELECT * FROM besoin_BNGRC WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les besoins non satisfaits
     public function getNonSatisfaits() {
         $stmt = $this->db->query("
             SELECT b.*, v.nom_ville, v.region,
@@ -41,8 +35,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Ajouter un besoin
     public function create($ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence, $produit_id = null) {
         $stmt = $this->db->prepare("
             INSERT INTO besoin_BNGRC 
@@ -51,8 +43,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->execute([$ville_id, $type_besoin, $description, $quantite, $unite, $niveau_urgence, $produit_id]);
     }
-    
-    // Récupérer le total attribué par type
     public function getTotalAttribue($type_besoin) {
         $stmt = $this->db->prepare("
             SELECT SUM(a.quantite_attribuee) as total 
@@ -64,8 +54,6 @@ class BesoinModel extends Model {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'] ?? 0;
     }
-    
-    // Statistiques des urgences
     public function getStatsUrgence() {
         $stmt = $this->db->query("
             SELECT 
@@ -77,8 +65,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer tous les besoins par ville pour le dashboard
     public function getAllBesoinsParVille() {
         $stmt = $this->db->query("
             SELECT 
@@ -99,8 +85,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les besoins critiques non satisfaits
     public function getBesoinsCritiquesNonSatisfaits() {
         $stmt = $this->db->query("
             SELECT b.*, v.nom_ville,
@@ -116,20 +100,14 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer la liste des villes pour le formulaire
     public function getVilles() {
         $stmt = $this->db->query("SELECT id, nom_ville FROM ville_BNGRC ORDER BY nom_ville");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Compter le total des besoins
     public function getTotalBesoins() {
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM besoin_BNGRC");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
-    
-    // Compter les villes aidées (qui ont reçu au moins une attribution)
     public function getVillesAidees() {
         $stmt = $this->db->query("
             SELECT COUNT(DISTINCT b.ville_id) as total
@@ -138,8 +116,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
-    
-    // Récupérer les besoins récents (VERSION CORRIGÉE)
     public function getBesoinsRecents($limit) {
         $stmt = $this->db->prepare("
             SELECT b.*, v.nom_ville 
@@ -152,8 +128,6 @@ class BesoinModel extends Model {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les catégories de produits
     public function getCategories() {
         $stmt = $this->db->query("
             SELECT id, nom_categorie, description
@@ -162,8 +136,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les produits
     public function getProduits() {
         $stmt = $this->db->query("
             SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
@@ -176,8 +148,6 @@ class BesoinModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les produits par catégorie
     public function getProduitsByCategorie($categorie_id) {
         $stmt = $this->db->prepare("
             SELECT p.id, p.categorie_id, p.nom_produit, p.description, 
@@ -191,8 +161,6 @@ class BesoinModel extends Model {
         $stmt->execute([$categorie_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les infos complètes d'un produit
     public function getProduitInfo($produit_id) {
         $stmt = $this->db->prepare("
             SELECT p.id, p.nom_produit, p.description, p.unite_mesure, 

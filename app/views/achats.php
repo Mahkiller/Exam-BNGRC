@@ -1,13 +1,10 @@
 <?php
-// app/views/achats.php
 ?>
-
 <div class="achats-container">
     <div class="header-section">
         <h1 class="animate-slide-top">🛒 Gestion des Achats</h1>
         <a href="<?= BASE_URL ?>/achats/creer" class="btn btn-primary">➕ Nouvel achat</a>
     </div>
-
     <!-- Filtrage par ville -->
     <div class="filter-section">
         <form method="GET" action="<?= BASE_URL ?>/achats" class="filter-form">
@@ -22,7 +19,6 @@
             </select>
         </form>
     </div>
-
     <!-- Statistiques -->
     <div class="stats-grid">
         <div class="stat-card stagger-item">
@@ -40,7 +36,6 @@
             </div>
         </div>
     </div>
-
     <!-- Montants par ville -->
     <div class="montants-section">
         <h3 class="animate-slide-top" style="animation-delay: 0.2s;">Montants d'achat par ville</h3>
@@ -52,11 +47,10 @@
                 </div>
             <?php endforeach; ?>
             <?php if (empty($montant_par_ville)): ?>
-                <p style="grid-column: 1/-1; text-align: center; color: #999;">Aucun achat enregistré</p>
+                <p style="grid-column: 1/-1; text-align: center; color: 
             <?php endif; ?>
         </div>
     </div>
-
     <!-- Tableau des achats -->
     <div class="table-container animate-slide-bottom">
         <h3>Liste des achats</h3>
@@ -110,47 +104,39 @@
         <?php endif; ?>
     </div>
 </div>
-
 <style>
 .achats-container {
     padding: 20px;
 }
-
 .header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
 }
-
 .filter-section {
     margin-bottom: 20px;
 }
-
 .filter-form {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-
 .filter-form select {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid 
     border-radius: 4px;
     font-size: 14px;
 }
-
 .montants-section {
     margin: 30px 0;
 }
-
 .montants-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
-
 .montant-card {
     background: white;
     padding: 15px;
@@ -158,64 +144,53 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
 }
-
 .montant-ville {
     font-size: 14px;
-    color: #666;
+    color: 
     margin-bottom: 8px;
 }
-
 .montant-value {
     font-size: 20px;
     font-weight: bold;
-    color: #c62828;
+    color: 
 }
-
 .table-container {
     background: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
-
 .achats-table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .achats-table thead {
-    background: #f5f5f5;
-    border-bottom: 2px solid #ddd;
+    background: 
+    border-bottom: 2px solid 
 }
-
 .achats-table th {
     padding: 12px;
     text-align: left;
     font-weight: 600;
-    color: #333;
+    color: 
 }
-
 .achats-table td {
     padding: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid 
 }
-
 .achats-table tbody tr:hover {
-    background: #f9f9f9;
+    background: 
 }
-
 .montant-cell {
-    color: #c62828;
+    color: 
     font-weight: bold;
 }
-
 .actions-cell {
     text-align: center;
 }
-
 .btn-delete {
     padding: 6px 12px;
-    background: #f44336;
+    background: 
     color: white;
     border: none;
     border-radius: 4px;
@@ -223,17 +198,14 @@
     font-size: 12px;
     transition: background 0.3s;
 }
-
 .btn-delete:hover {
-    background: #d32f2f;
+    background: 
 }
-
 .empty-state {
     padding: 40px;
     text-align: center;
-    color: #999;
+    color: 
 }
-
 .empty-state p {
     margin-bottom: 20px;
 }

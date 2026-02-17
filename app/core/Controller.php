@@ -7,7 +7,6 @@ class Controller {
         require_once $base_path . '/' . $view . '.php';
         require_once $base_path . '/layout/footer.php';
     }
-    
     protected function redirect($url) {
         header('Location: ' . BASE_URL . '/' . ltrim($url, '/'));
         exit();

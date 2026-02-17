@@ -3,28 +3,21 @@ class DashboardController extends Controller {
     private $besoinService;
     private $donService;
     private $stockService;
-    
     public function __construct() {
         $this->besoinService = ServiceContainer::getBesoinService();
         $this->donService = ServiceContainer::getDonService();
         $this->stockService = ServiceContainer::getStockService();
     }
-    
     public function index() {
         $stockGlobal = $this->stockService->getStockGlobal();
-        
-        // DEBUG : Afficher le contenu de $stockGlobal pour vérifier
-        // var_dump($stockGlobal); exit;
-        
         $data = [
             'stats' => [
                 'total_besoins' => $this->besoinService->getTotalBesoins(),
                 'total_dons' => $this->donService->getTotalDons(),
                 'villes_aidees' => $this->besoinService->getVillesAidees(),
-                // CORRECTION : Utiliser les bonnes clés du stock global
-                'stock_riz' => $stockGlobal['nature'] ?? 0,        // Riz = nature
-                'stock_argent' => $stockGlobal['argent'] ?? 0,      // Argent
-                'stock_toles' => $stockGlobal['materiaux'] ?? 0     // Tôles = materiaux
+                'stock_riz' => $stockGlobal['nature'] ?? 0,        
+                'stock_argent' => $stockGlobal['argent'] ?? 0,      
+                'stock_toles' => $stockGlobal['materiaux'] ?? 0     
             ],
             'besoins_recents' => $this->besoinService->getBesoinsRecents(5),
             'dons_recents' => $this->donService->getDonsRecents(5),
@@ -35,7 +28,6 @@ class DashboardController extends Controller {
             ],
             'top_donateurs' => $this->donService->getTopDonateurs(3)
         ];
-        
         $this->view('dashboard', $data);
     }
 }

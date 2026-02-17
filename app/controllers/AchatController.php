@@ -3,25 +3,18 @@ class AchatController extends Controller {
     private $achatService;
     private $donService;
     private $besoinService;
-    
     public function __construct() {
         $this->achatService = ServiceContainer::getAchatService();
         $this->donService = ServiceContainer::getDonService();
         $this->besoinService = ServiceContainer::getBesoinService();
     }
-
-    
-    
-    // Afficher tous les achats
     public function index() {
         $ville_id = $_GET['ville_id'] ?? null;
-        
         if ($ville_id) {
             $achats = $this->achatService->getAchatsByVille($ville_id);
         } else {
             $achats = $this->achatService->getAllAchats();
         }
-        
         $data = [
             'achats' => $achats,
             'villes' => $this->besoinService->getVilles(),
@@ -30,11 +23,8 @@ class AchatController extends Controller {
             'total_montant' => $this->achatService->getTotalMontantAchats(),
             'montant_par_ville' => $this->achatService->getMontantTotalParVille()
         ];
-        
         $this->view('achats', $data);
     }
-    
-    // Créer un achat
     public function creer() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $don_id = $_POST['don_id'] ?? null;
@@ -42,12 +32,9 @@ class AchatController extends Controller {
             $produit_id = $_POST['produit_id'] ?? null;
             $quantite = $_POST['quantite'] ?? 0;
             $prix_unitaire = $_POST['prix_unitaire'] ?? 0;
-            
-            // Si le prix n'est pas fourni, le récupérer de la base
             if (!$prix_unitaire && $produit_id) {
                 $prix_unitaire = $this->achatService->getPrixProduit($produit_id);
             }
-            
             $result = $this->achatService->creerAchat(
                 $don_id, 
                 $besoin_id, 
@@ -55,16 +42,13 @@ class AchatController extends Controller {
                 $quantite, 
                 $prix_unitaire
             );
-            
             if ($result['success']) {
                 $_SESSION['message'] = 'Achat créé avec succès';
             } else {
                 $_SESSION['error'] = $result['message'];
             }
-            
             $this->redirect('/achats');
         }
-        
         $data = [
             'dons_argent' => array_filter($this->donService->getAllDons(), function($d) {
                 return $d['type_don'] === 'argent';
@@ -72,20 +56,15 @@ class AchatController extends Controller {
             'besoins' => $this->besoinService->getAllBesoins(),
             'produits' => $this->achatService->getProduits()
         ];
-        
         $this->view('achat_form', $data);
     }
-    
-    // Supprimer un achat
     public function supprimer() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
-            
             if ($id) {
                 $result = $this->achatService->supprimerAchat($id);
                 $_SESSION['message'] = $result['message'];
             }
-            
             $this->redirect('/achats');
         }
     }

@@ -1,12 +1,9 @@
 <?php
-// app/views/dashboard.php
 ?>
-
 <div class="dashboard-container">
     <!-- HEADER AVEC BOUTON RESET -->
     <div class="dashboard-header animate-slide-top">
         <h1>📊 Tableau de bord</h1>
-        
         <form method="POST" action="<?= BASE_URL ?>/reset" 
               onsubmit="return confirm('⚠️ ATTENTION !\n\nCette action va supprimer :\n• Tous les besoins\n• Tous les achats\n• Toutes les ventes\n• Toutes les attributions\n\nSeuls les dons de base seront conservés.\n\nÊtes-vous absolument sûr ?')">
             <button type="submit" class="btn-reset">
@@ -15,7 +12,6 @@
             </button>
         </form>
     </div>
-
     <!-- Stats Cards -->
     <div class="stats-grid">
         <div class="stat-card stagger-item">
@@ -41,15 +37,12 @@
             </div>
         </div>
     </div>
-
     <h2 class="animate-slide-top" style="animation-delay: 0.2s;">Situation par ville</h2>
-
     <!-- Carrousel horizontal -->
     <div class="carousel-container">
         <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><</button>
         <div class="carousel-track" id="villeCarousel">
             <?php 
-            // Regrouper les besoins par ville
             $villes_data = [];
             foreach ($villes as $item) {
                 $ville_nom = $item['nom_ville'] ?? $item['ville'] ?? 'Inconnue';
@@ -66,8 +59,6 @@
                     $villes_data[$ville_nom]['urgent'] = true;
                 }
             }
-
-            // Afficher chaque ville
             foreach ($villes_data as $ville): 
                 $classe_urgent = $ville['urgent'] ? 'urgent' : '';
             ?>
@@ -89,7 +80,6 @@
                     <?php 
                     $total_besoins = count($ville['besoins']);
                     $premiers_besoins = array_slice($ville['besoins'], 0, 2);
-                    
                     foreach ($premiers_besoins as $besoin):
                         $quantite = $besoin['quantite_demandee'] ?? $besoin['quantite'] ?? 0;
                         $attribue = $besoin['attribue'] ?? $besoin['quantite_attribuee'] ?? 0;
@@ -101,7 +91,6 @@
                         <span><?= htmlspecialchars($description) ?>:</span>
                         <strong><?= number_format($quantite, 0, ',', ' ') ?> <?= $unite ?></strong>
                     </div>
-                    
                     <?php if ($attribue > 0): ?>
                     <div class="besoin-item animate-fade">
                         <span>Déjà attribué:</span>
@@ -112,33 +101,27 @@
                         <div class="progress-fill" style="width: <?= $pourcentage ?>%"></div>
                     </div>
                     <?php endif; ?>
-                    
                     <?php endforeach; ?>
-                    
                     <?php if ($total_besoins > 2): ?>
                     <div class="badge">+<?= $total_besoins - 2 ?> autre(s) besoin(s)</div>
                     <?php endif; ?>
-                    
                     <button class="btn-attribuer" onclick="location.href='<?= BASE_URL ?>/dons/attribution'">
                         ➕ Attribuer des dons
                     </button>
                 </div>
             </div>
             <?php endforeach; ?>
-
             <?php if (empty($villes_data)): ?>
             <div class="ville-card">
                 <div class="card-body">
-                    <p style="text-align: center; color: #666;">Aucune donnée de ville disponible</p>
+                    <p style="text-align: center; color: 
                 </div>
             </div>
             <?php endif; ?>
         </div>
         <button class="carousel-btn next" onclick="scrollCarousel(1)">></button>
     </div>
-
     <h2>Derniers dons enregistrés</h2>
-
     <!-- Derniers dons -->
     <div class="dons-cards">
         <?php if (!empty($dons_recents)): ?>
@@ -167,7 +150,6 @@
         <?php endif; ?>
     </div>
 </div>
-
 <!-- JavaScript pour le carrousel -->
 <script>
 function scrollCarousel(direction) {

@@ -1,9 +1,6 @@
 <?php
-// NE PAS METTRE DOCTYPE HTML ICI !
 ?>
-
 <h1 class="animate-slide-top">📝 Gestion des besoins</h1>
-
 <div class="stats-mini">
     <?php foreach ($stats_urgence as $stat): ?>
     <div class="stat-mini stagger-item <?= $stat['niveau_urgence'] ?>">
@@ -12,7 +9,6 @@
     </div>
     <?php endforeach; ?>
 </div>
-
 <div class="form-container animate-slide-right">
     <h2>Ajouter un besoin</h2>
     <form action="<?= BASE_URL ?>/besoins/ajouter" method="POST" id="besoin-form">
@@ -25,7 +21,6 @@
                 <?php endforeach; ?>
             </select>
         </div>
-        
         <div class="form-group stagger-item">
             <label>Type de besoin *</label>
             <select name="type_besoin" id="type_besoin" required onchange="toggleBesoinSections()">
@@ -35,7 +30,6 @@
                 <option value="argent">💰 Argent</option>
             </select>
         </div>
-        
         <!-- Section Argent -->
         <div id="besoin-argent-section" class="form-section" style="display:none;">
             <div class="form-group stagger-item">
@@ -43,7 +37,6 @@
                 <input type="number" name="quantite_argent" step="100" min="0" placeholder="ex: 1000000">
             </div>
         </div>
-        
         <!-- Section Produit -->
         <div id="besoin-produit-section" class="form-section" style="display:none;">
             <div class="form-group stagger-item">
@@ -57,18 +50,15 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            
             <div class="form-group stagger-item">
                 <label>Quantité *</label>
                 <input type="number" name="quantite" step="0.01" min="0.01" required>
             </div>
-            
             <div class="form-group stagger-item">
                 <label>Unité</label>
                 <input type="text" name="unite" id="unite" readonly>
             </div>
         </div>
-        
         <div class="form-group stagger-item">
             <label>Niveau d'urgence *</label>
             <select name="niveau_urgence" required>
@@ -78,11 +68,9 @@
                 <option value="faible">🟢 Faible</option>
             </select>
         </div>
-        
         <button type="submit" class="btn-primary stagger-item">Ajouter le besoin</button>
     </form>
 </div>
-
 <h2 class="animate-slide-top" style="animation-delay: 0.3s;">Liste des besoins</h2>
 <table class="table animate-slide-bottom">
     <thead>
@@ -121,13 +109,11 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
 <script>
 function toggleBesoinSections() {
     const typeBesoin = document.getElementById('type_besoin').value;
     const argentSection = document.getElementById('besoin-argent-section');
     const produitSection = document.getElementById('besoin-produit-section');
-    
     if (typeBesoin === 'argent') {
         argentSection.style.display = 'block';
         produitSection.style.display = 'none';
@@ -143,7 +129,6 @@ function toggleBesoinSections() {
         produitSection.style.display = 'none';
     }
 }
-
 document.getElementById('produit_id').addEventListener('change', function() {
     const selectedOption = this.options[this.selectedIndex];
     if (selectedOption.value) {
@@ -152,7 +137,6 @@ document.getElementById('produit_id').addEventListener('change', function() {
         document.getElementById('unite').value = '';
     }
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     toggleBesoinSections();
 });

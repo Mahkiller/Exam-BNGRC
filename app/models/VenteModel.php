@@ -1,7 +1,5 @@
 <?php
 class VenteModel extends Model {
-    
-    // Récupérer toutes les ventes
     public function getAll() {
         $stmt = $this->db->query("
             SELECT v.*, 
@@ -17,8 +15,6 @@ class VenteModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer une vente par ID
     public function getById($id) {
         $stmt = $this->db->prepare("
             SELECT v.*, 
@@ -33,8 +29,6 @@ class VenteModel extends Model {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    // Créer une vente
     public function create($don_id, $produit_id, $quantite_vendue, $prix_unitaire_reference, 
                           $prix_vente_unitaire, $montant_total, $taux_depreciation, $acheteur = null, $notes = null) {
         try {
@@ -45,7 +39,6 @@ class VenteModel extends Model {
                      taux_depreciation, acheteur, notes, date_vente) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
                 ");
-                
                 $result = $stmt->execute([
                     $produit_id, 
                     $quantite_vendue, 
@@ -62,7 +55,6 @@ class VenteModel extends Model {
                      taux_depreciation, acheteur, notes, date_vente) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
                 ");
-                
                 $result = $stmt->execute([
                     $don_id, 
                     $produit_id, 
@@ -74,19 +66,15 @@ class VenteModel extends Model {
                     $notes
                 ]);
             }
-            
             if ($result) {
                 return $this->db->lastInsertId();
             }
             return false;
-            
         } catch (PDOException $e) {
             error_log("Erreur PDO dans create vente: " . $e->getMessage());
             throw new Exception("Erreur base de données: " . $e->getMessage());
         }
     }
-    
-    // Récupérer les stocks disponibles pour la vente
     public function getStocksDisponibles() {
         try {
             $stmt = $this->db->query("
@@ -109,8 +97,6 @@ class VenteModel extends Model {
             return [];
         }
     }
-    
-    // Vérifier s'il y a un besoin non satisfait pour un produit
     public function hasUnmetNeed($produit_id) {
         $stmt = $this->db->prepare("
             SELECT COUNT(*) as count
@@ -123,8 +109,6 @@ class VenteModel extends Model {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['count'] > 0;
     }
-    
-    // Réduire le stock après vente
     public function reduceStock($produit_id, $quantite) {
         $stmt = $this->db->prepare("
             UPDATE produit_BNGRC 
@@ -133,8 +117,6 @@ class VenteModel extends Model {
         ");
         return $stmt->execute([$quantite, $produit_id]);
     }
-    
-    // Enregistrer un mouvement de stock pour la vente
     public function recordStockMovement($produit_id, $quantite, $vente_id) {
         $stmt = $this->db->prepare("
             INSERT INTO mouvement_stock_BNGRC 
@@ -143,22 +125,17 @@ class VenteModel extends Model {
         ");
         return $stmt->execute([$produit_id, $quantite, $vente_id]);
     }
-    
-    // Récupérer le total des ventes
     public function getTotalVentes() {
         $stmt = $this->db->query("SELECT COALESCE(SUM(montant_total), 0) as total FROM vente_BNGRC");
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'] ?? 0;
     }
-    
-    // Récupérer le taux de change de la configuration
     public function getTauxChange() {
         try {
             $stmt = $this->db->query("SHOW TABLES LIKE 'configuration_BNGRC'");
             if ($stmt->rowCount() == 0) {
                 return 0.10;
             }
-            
             $stmt = $this->db->prepare("
                 SELECT param_value 
                 FROM configuration_BNGRC 
@@ -167,13 +144,11 @@ class VenteModel extends Model {
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return isset($result['param_value']) ? (float)$result['param_value'] / 100 : 0.10;
-            
         } catch (Exception $e) {
             error_log("Erreur getTauxChange: " . $e->getMessage());
             return 0.10;
         }
     }
-    
     public function getConfiguration() {
         try {
             $stmt = $this->db->query("SHOW TABLES LIKE 'configuration_BNGRC'");
@@ -184,21 +159,17 @@ class VenteModel extends Model {
                     ['param_key' => 'tva_vente', 'param_value' => '0', 'description' => 'TVA']
                 ];
             }
-            
             $stmt = $this->db->query("
                 SELECT param_key, param_value, description
                 FROM configuration_BNGRC
                 ORDER BY param_key
             ");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
         } catch (Exception $e) {
             error_log("Erreur getConfiguration: " . $e->getMessage());
             return [];
         }
     }
-    
-    // Mettre à jour un paramètre de configuration
     public function updateConfiguration($param_key, $param_value) {
         $stmt = $this->db->prepare("
             UPDATE configuration_BNGRC 
@@ -207,8 +178,6 @@ class VenteModel extends Model {
         ");
         return $stmt->execute([$param_value, $param_key]);
     }
-    
-    // Récupérer les statistiques de ventes
     public function getSalesStats() {
         $stmt = $this->db->query("
             SELECT 
@@ -220,8 +189,6 @@ class VenteModel extends Model {
         ");
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les ventes par catégorie
     public function getSalesByCategory() {
         $stmt = $this->db->query("
             SELECT 
@@ -237,8 +204,6 @@ class VenteModel extends Model {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    // Récupérer les besoins actifs pour un produit
     public function getActiveNeedsForProduct($produit_id) {
         $stmt = $this->db->prepare("
             SELECT b.id, 

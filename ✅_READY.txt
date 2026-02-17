@@ -25,7 +25,7 @@
 1️⃣  composer install
     (installe Flight PHP depuis Composer)
 
-2️⃣  mysql -u root BNGRC < database/base.sql  
+2️⃣  mysql -u root ETU004082_4338_4433 < database/base.sql  
     (crée la base de données et les tables)
 
 3️⃣  php -S localhost:8000 -t public router.php
@@ -99,8 +99,8 @@
 ❓ QUESTIONS?
 
 Consultez:
-  📄 QUICKSTART.md       - Commandes pour démarrer
-  📄 SETUP.md            - Guide complet
-  📄 MIGRATION_SUMMARY.md - Détail des changements
+  📄 README.md           - Description du projet
+  📄 SETUP.md            - Guide complet d'installation
+  📄 to do list.md       - Liste des tâches réalisées
 
 ═══════════════════════════════════════════════════════════════════════════

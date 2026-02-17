@@ -1,18 +1,15 @@
 <?php include 'layout/header.php'; ?>
-
 <!-- Alerts -->
 <?php if (!empty($data['success_message'])): ?>
     <div class="alert success animate-slide-top">
         <strong>✓ Succès!</strong> <?php echo htmlspecialchars($data['success_message']); ?>
     </div>
 <?php endif; ?>
-
 <?php if (!empty($data['error_message'])): ?>
     <div class="alert error animate-slide-top">
         <strong>✗ Erreur!</strong> <?php echo htmlspecialchars($data['error_message']); ?>
     </div>
 <?php endif; ?>
-
 <!-- Header -->
 <div class="ventes-header animate-slide-top">
     <div class="header-left">
@@ -25,7 +22,6 @@
         </a>
     </div>
 </div>
-
 <!-- Stats -->
 <div class="stats-grid mb-4">
     <?php if ($data['stats']): ?>
@@ -47,7 +43,6 @@
         </div>
     <?php endif; ?>
 </div>
-
 <!-- Formulaire de vente et infos -->
 <div class="ventes-grid">
     <!-- Colonne gauche : Formulaire -->
@@ -75,7 +70,6 @@
                     </select>
                     <div id="product-warning" class="alert alert-warning mt-2" style="display: none;"></div>
                 </div>
-                
                 <div class="form-row">
                     <div class="form-group half stagger-item">
                         <label for="quantite_vendue">Quantité *</label>
@@ -90,7 +84,6 @@
                         <small class="text-muted">Ar</small>
                     </div>
                 </div>
-                
                 <div class="form-row">
                     <div class="form-group half stagger-item">
                         <label for="prix_vente">Prix Vente (après dépréciation)</label>
@@ -105,7 +98,6 @@
                         <small class="text-muted">Ar</small>
                     </div>
                 </div>
-                
                 <div class="form-group stagger-item">
                     <label for="don_id">Don Associé</label>
                     <select class="form-control" id="don_id" name="don_id">
@@ -120,26 +112,22 @@
                         <?php endif; ?>
                     </select>
                 </div>
-                
                 <div class="form-group stagger-item">
                     <label for="acheteur">Acheteur</label>
                     <input type="text" class="form-control" id="acheteur" name="acheteur" 
                            placeholder="Nom de l'acheteur (optionnel)">
                 </div>
-                
                 <div class="form-group stagger-item">
                     <label for="notes">Notes</label>
                     <textarea class="form-control" id="notes" name="notes" rows="3" 
                               placeholder="Notes additionnelles (optionnel)"></textarea>
                 </div>
-                
                 <button type="submit" class="btn-primary w-100 stagger-item">
                     ✓ Valider la Vente
                 </button>
             </form>
         </div>
     </div>
-    
     <!-- Colonne droite : Infos -->
     <div class="ventes-col">
         <div class="stock-info animate-slide-left">
@@ -148,7 +136,6 @@
                 <p class="text-muted">Sélectionnez un produit pour voir les détails</p>
             </div>
         </div>
-        
         <div class="stock-info mt-3 animate-slide-left">
             <h2>📊 Ventes par Catégorie</h2>
             <?php if (!empty($data['sales_by_category'])): ?>
@@ -174,7 +161,6 @@
         </div>
     </div>
 </div>
-
 <!-- Historique des ventes -->
 <div class="historique-section">
     <div class="stock-info animate-slide-bottom">
@@ -217,30 +203,23 @@
         <?php endif; ?>
     </div>
 </div>
-
 <script>
 const tauxChange = <?php echo $data['taux_change']; ?>;
-
 function updateProduitInfo() {
     const select = document.getElementById('produit_id');
     if (!select.value) return;
-    
     const option = select.options[select.selectedIndex];
     const prixRef = parseFloat(option.dataset.price) || 0;
     const stock = parseFloat(option.dataset.stock) || 0;
     const unite = option.dataset.unite || '';
-    
     document.getElementById('prix_unitaire_reference').value = prixRef.toFixed(2);
     document.getElementById('stock-info').textContent = `Stock disponible: ${stock} ${unite}`;
-    
-    // Vérifier si le produit peut être vendu
     const produitId = select.value;
     if (produitId) {
         checkProduct(produitId);
         calculatePrices();
     }
 }
-
 function checkProduct(produitId) {
     fetch(BASE_URL + '/ventes/check-product?produit_id=' + produitId)
         .then(r => r.json())
@@ -268,20 +247,15 @@ function checkProduct(produitId) {
             console.error('Erreur:', err);
         });
 }
-
 function calculatePrices() {
     const quantite = parseFloat(document.getElementById('quantite_vendue').value) || 0;
     const prixRef = parseFloat(document.getElementById('prix_unitaire_reference').value) || 0;
-    
     const prixVente = prixRef * (1 - tauxChange);
     const montantTotal = quantite * prixVente;
-    
     document.getElementById('prix_vente').value = prixVente.toFixed(2);
     document.getElementById('montant_total_calc').value = montantTotal.toFixed(2);
 }
-
 document.getElementById('quantite_vendue').addEventListener('input', calculatePrices);
 document.getElementById('quantite_vendue').addEventListener('change', calculatePrices);
 </script>
-
 <?php include 'layout/footer.php'; ?>

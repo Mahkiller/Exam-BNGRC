@@ -2,13 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 session_start();
-
-// Require composer autoload
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-
-// Custom autoloader for app classes
 spl_autoload_register(function ($class) {
     $paths = [
         dirname(__DIR__) . '/app/core/',
@@ -17,7 +12,6 @@ spl_autoload_register(function ($class) {
         dirname(__DIR__) . '/app/services/',
         dirname(__DIR__) . '/app/config/'
     ];
-    
     foreach ($paths as $path) {
         $file = $path . $class . '.php';
         if (file_exists($file)) {
@@ -26,159 +20,114 @@ spl_autoload_register(function ($class) {
         }
     }
 });
-
-// Load configuration files
 require_once dirname(__DIR__) . '/app/config/config.php';
 require_once dirname(__DIR__) . '/app/config/database.php';
-require_once dirname(__DIR__) . '/app/config/ServiceContainer.php'; // AJOUTE CETTE LIGNE
-
-// Initialize Flight
+require_once dirname(__DIR__) . '/app/config/ServiceContainer.php'; 
 Flight::set('flight.base_url', BASE_URL);
-
-// ... reste du code inchangé ...
-
-// Handle static files
 $requested_file = __DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ($requested_file !== __FILE__ && is_file($requested_file)) {
     return false;
 }
-
-// ============================================
-// ROUTES
-// ============================================
-
-// Routes Dashboard
 Flight::route('/', function () {
     $controller = new DashboardController();
     return $controller->index();
 });
-
 Flight::route('/dashboard', function () {
     $controller = new DashboardController();
     return $controller->index();
 });
-
-// Route Reset (POST)
 Flight::route('POST /reset', function () {
     $controller = new ResetController();
     return $controller->reset();
 });
-
-// Routes Besoins
 Flight::route('/besoins', function () {
     $controller = new BesoinsController();
     return $controller->index();
 });
-
 Flight::route('/besoins/ajouter', function () {
     $controller = new BesoinsController();
     return $controller->ajouter();
 });
-
-// Routes Dons
 Flight::route('/dons', function () {
     $controller = new DonsController();
     return $controller->index();
 });
-
 Flight::route('/dons/ajouter', function () {
     $controller = new DonsController();
     return $controller->ajouter();
 });
-
 Flight::route('/attribution', function () {
     $controller = new DonsController();
     return $controller->attribution();
 });
-
+Flight::route('POST /reset', function () {
+    $controller = new ResetController();
+    return $controller->reset();
+});
 Flight::route('/dons/attribution', function () {
     $controller = new DonsController();
     return $controller->attribution();
 });
-
-// API Routes
 Flight::route('/api/creer-produit', function () {
     $controller = new ApiController();
     return $controller->creerProduit();
 });
-
 Flight::route('/api/produits-by-categorie', function () {
     $controller = new ApiController();
     return $controller->getProduitsByCategorie();
 });
-
-// Route pour l'attribution AJAX
 Flight::route('/attribution/attribuer', function () {
     $controller = new DonsController();
     return $controller->attribuer();
 });
-
-// Routes Achats
 Flight::route('/achats', function () {
     $controller = new AchatController();
     return $controller->index();
 });
-
 Flight::route('/achats/creer', function () {
     $controller = new AchatController();
     return $controller->creer();
 });
-
 Flight::route('/achats/supprimer', function () {
     $controller = new AchatController();
     return $controller->supprimer();
 });
-
-// Routes Récapitulatif
 Flight::route('/recap', function () {
     $controller = new RecapController();
     return $controller->index();
 });
-
 Flight::route('/recap/actualiser', function () {
     $controller = new RecapController();
     return $controller->actualiser();
 });
-
-// Routes Stock
 Flight::route('/stock', function () {
     $controller = new StockController();
     return $controller->index();
 });
-
-// Routes Ventes
 Flight::route('/ventes', function () {
     $controller = new VenteController();
     return $controller->index();
 });
-
 Flight::route('/ventes/vendre', function () {
     $controller = new VenteController();
     return $controller->vendre();
 });
-
 Flight::route('/ventes/config', function () {
     $controller = new VenteController();
     return $controller->config();
 });
-
 Flight::route('/ventes/update-config', function () {
     $controller = new VenteController();
     return $controller->updateConfig();
 });
-
 Flight::route('/ventes/check-product', function () {
     $controller = new VenteController();
     return $controller->checkProduct();
 });
-
-// 404 Handler
 Flight::map('notFound', function() {
     http_response_code(404);
     echo '<h1>404 - Page non trouvée</h1>';
     echo '<p>La page que vous recherchez n\'existe pas.</p>';
     echo '<a href="' . BASE_URL . '/dashboard">Retour au dashboard</a>';
 });
-
-// Start Flight
 Flight::start();
