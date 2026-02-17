@@ -84,6 +84,17 @@ Flight::route('/dons/attribution', function () {
     return $controller->attribution();
 });
 
+// API Routes
+Flight::route('/api/creer-produit', function () {
+    $controller = new ApiController();
+    return $controller->creerProduit();
+});
+
+Flight::route('/api/produits-by-categorie', function () {
+    $controller = new ApiController();
+    return $controller->getProduitsByCategorie();
+});
+
 // Route pour l'attribution AJAX
 Flight::route('/attribution/attribuer', function () {
     $controller = new DonsController();

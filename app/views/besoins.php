@@ -28,35 +28,12 @@
         
         <div class="form-group stagger-item">
             <label>Type de besoin *</label>
-            <select name="type_besoin" id="type_besoin" required onchange="updateCategoriesFor('besoin')">
+            <select name="type_besoin" id="type_besoin" required onchange="toggleBesoinSections()">
                 <option value="">-- Sélectionnez un type --</option>
-                <option value="nature">📦 Produit (Nature/Matériaux)</option>
+                <option value="nature">🌾 Nature (riz, huile, eau...)</option>
+                <option value="materiaux">🔨 Matériaux (tôles, ciment...)</option>
                 <option value="argent">💰 Argent</option>
             </select>
-        </div>
-        
-        <!-- Section Produit -->
-        <div id="besoin-produit-section" class="form-section" style="display:none;">
-            <!-- Catégorie -->
-            <div class="form-group stagger-item">
-                <label>Catégorie de produit *</label>
-                <select name="categorie_id" id="besoin-categorie_id" onchange="updateProduitsFor('besoin')">
-                    <option value="">-- Sélectionnez une catégorie --</option>
-                    <?php foreach ($categories as $cat): ?>
-                        <?php if ($cat['nom_categorie'] !== 'argent'): ?>
-                            <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['nom_categorie']) ?></option>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            
-            <!-- Produit -->
-            <div class="form-group stagger-item">
-                <label>Produit *</label>
-                <select name="produit_id" id="besoin-produit_id">
-                    <option value="">-- Sélectionnez un produit --</option>
-                </select>
-            </div>
         </div>
         
         <!-- Section Argent -->
@@ -67,15 +44,28 @@
             </div>
         </div>
         
-        <div class="form-row">
-            <div class="form-group half stagger-item">
+        <!-- Section Produit -->
+        <div id="besoin-produit-section" class="form-section" style="display:none;">
+            <div class="form-group stagger-item">
+                <label>Produit *</label>
+                <select name="produit_id" id="produit_id" required>
+                    <option value="">-- Sélectionnez un produit --</option>
+                    <?php foreach ($produits as $produit): ?>
+                        <option value="<?= $produit['id'] ?>" data-unite="<?= $produit['unite_mesure'] ?>">
+                            <?= htmlspecialchars($produit['nom_produit']) ?> (<?= $produit['unite_mesure'] ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            
+            <div class="form-group stagger-item">
                 <label>Quantité *</label>
                 <input type="number" name="quantite" step="0.01" min="0.01" required>
             </div>
             
-            <div class="form-group half stagger-item">
-                <label>Unité *</label>
-                <input type="text" name="unite" placeholder="kg, litre, Ariary..." required>
+            <div class="form-group stagger-item">
+                <label>Unité</label>
+                <input type="text" name="unite" id="unite" readonly>
             </div>
         </div>
         
@@ -133,73 +123,37 @@
 </table>
 
 <script>
-// Données des produits par catégorie depuis PHP
-const besoinProduitsByCategory = <?php
-    $byCategory = [];
-    foreach ($produits as $produit) {
-        $catId = $produit['categorie_id'];
-        if (!isset($byCategory[$catId])) {
-            $byCategory[$catId] = [];
-        }
-        $byCategory[$catId][] = $produit;
-    }
-    echo json_encode($byCategory);
-?>;
-
-// Gérer le changement de type de besoin
-function updateCategoriesFor(prefix) {
-    const typeBesoin = document.getElementById(prefix + '-type_besoin').value;
-    const produitSection = document.getElementById(prefix + '-produit-section');
-    const argentSection = document.getElementById(prefix + '-argent-section');
+function toggleBesoinSections() {
+    const typeBesoin = document.getElementById('type_besoin').value;
+    const argentSection = document.getElementById('besoin-argent-section');
+    const produitSection = document.getElementById('besoin-produit-section');
     
-    if (typeBesoin === 'nature') {
-        produitSection.style.display = 'block';
-        argentSection.style.display = 'none';
-    } else if (typeBesoin === 'argent') {
-        produitSection.style.display = 'none';
+    if (typeBesoin === 'argent') {
         argentSection.style.display = 'block';
-    } else {
         produitSection.style.display = 'none';
+        document.querySelector('[name="quantite_argent"]').setAttribute('required', 'required');
+        document.querySelector('[name="produit_id"]').removeAttribute('required');
+    } else if (typeBesoin === 'nature' || typeBesoin === 'materiaux') {
         argentSection.style.display = 'none';
+        produitSection.style.display = 'block';
+        document.querySelector('[name="quantite_argent"]').removeAttribute('required');
+        document.querySelector('[name="produit_id"]').setAttribute('required', 'required');
+    } else {
+        argentSection.style.display = 'none';
+        produitSection.style.display = 'none';
     }
 }
 
-// Mettre à jour les produits en fonction de la catégorie (pour besoins)
-function updateProduitsFor(prefix) {
-    const categorieId = parseInt(document.getElementById(prefix + '-categorie_id').value);
-    const produitSelect = document.getElementById(prefix + '-produit_id');
-    
-    produitSelect.innerHTML = '<option value="">-- Sélectionnez un produit --</option>';
-    
-    if (categorieId && besoinProduitsByCategory[categorieId]) {
-        besoinProduitsByCategory[categorieId].forEach(produit => {
-            const option = document.createElement('option');
-            option.value = produit.id;
-            option.setAttribute('data-unite', produit.unite_mesure);
-            option.setAttribute('data-prix', produit.prix_unitaire_reference);
-            option.textContent = produit.nom_produit + ' (' + produit.unite_mesure + ')';
-            produitSelect.appendChild(option);
-        });
+document.getElementById('produit_id').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    if (selectedOption.value) {
+        document.getElementById('unite').value = selectedOption.getAttribute('data-unite');
+    } else {
+        document.getElementById('unite').value = '';
     }
-    
-    // Mettre à jour l'unité quand on change de produit
-    produitSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-            document.getElementsByName('unite')[0].value = selectedOption.getAttribute('data-unite');
-        }
-    });
-}
+});
 
-// Initialiser au chargement
 document.addEventListener('DOMContentLoaded', function() {
-    const typeBesoinSelect = document.getElementById('besoin-type_besoin');
-    if (typeBesoinSelect) {
-        // Renommer les IDs pour le besoin
-        typeBesoinSelect.id = 'type_besoin';
-        typeBesoinSelect.addEventListener('change', function() {
-            updateCategoriesFor('besoin');
-        });
-    }
+    toggleBesoinSections();
 });
 </script>

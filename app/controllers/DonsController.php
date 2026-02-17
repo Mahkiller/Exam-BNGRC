@@ -45,11 +45,24 @@ class DonsController extends Controller {
                 $totaux[$catId] = [
                     'nom_categorie' => $produit['nom_categorie'],
                     'total_stock' => 0,
-                    'unite' => ''
+                    'unite' => $produit['unite_mesure']
                 ];
             }
             $totaux[$catId]['total_stock'] += $produit['stock_actuel'];
-            $totaux[$catId]['unite'] = $produit['unite_mesure'];
+        }
+        
+        // Ajouter l'argent aux totaux
+        $argent_total = $this->donService->getStockGlobal()['argent'] ?? 0;
+        $categorie_argent = array_filter($categories, function($c) { 
+            return $c['nom_categorie'] === 'argent'; 
+        });
+        if (!empty($categorie_argent)) {
+            $catId = reset($categorie_argent)['id'];
+            $totaux[$catId] = [
+                'nom_categorie' => 'argent',
+                'total_stock' => $argent_total,
+                'unite' => 'Ar'
+            ];
         }
         
         $data = [
@@ -71,16 +84,27 @@ class DonsController extends Controller {
             if ($type_don === 'argent') {
                 // Don en argent
                 $quantite = $_POST['quantite_argent'] ?? 0;
+                if ($quantite <= 0) {
+                    $_SESSION['error'] = 'Le montant doit être positif';
+                    $this->redirect('dons');
+                    return;
+                }
                 $description = 'Don en argent';
                 $unite = 'Ar';
                 $produit_id = null;
                 
                 $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id);
+                
             } else if ($type_don === 'produit') {
                 // Don en produit
                 $produit_id = $_POST['produit_id'] ?? null;
                 $quantite = $_POST['quantite_produit'] ?? 0;
-                $categorie_id = $_POST['categorie_id'] ?? null;
+                
+                if ($quantite <= 0) {
+                    $_SESSION['error'] = 'La quantité doit être positive';
+                    $this->redirect('dons');
+                    return;
+                }
                 
                 // Récupérer les infos du produit
                 $produit = $this->donService->getProduitInfo($produit_id);

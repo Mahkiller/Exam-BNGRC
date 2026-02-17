@@ -75,7 +75,7 @@
             <input type="text" name="donateur" placeholder="Nom du donateur" required>
         </div>
         
-        <!-- Type de don (choix entre argent et nature/matériaux) -->
+        <!-- Type de don -->
         <div class="form-group stagger-item">
             <label>Type de don *</label>
             <select name="type_don" id="type_don" required onchange="updateCategories()">
@@ -108,39 +108,60 @@
                 </select>
             </div>
             
-            <!-- Produit -->
+            <!-- Produit existant -->
             <div class="form-group stagger-item">
                 <label>Produit *</label>
-                <div class="select-row">
-                    <select name="produit_id" id="produit_id">
+                <div class="select-row" style="display: flex; gap: 10px;">
+                    <select name="produit_id" id="produit_id" style="flex: 1;">
                         <option value="">-- Sélectionnez un produit --</option>
+                        <?php foreach ($produits as $produit): ?>
+                            <option value="<?= $produit['id'] ?>" 
+                                    data-unite="<?= $produit['unite_mesure'] ?>" 
+                                    data-prix="<?= $produit['prix_unitaire_reference'] ?>">
+                                <?= htmlspecialchars($produit['nom_produit']) ?> (<?= $produit['unite_mesure'] ?>)
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-                    <button type="button" class="btn-secondary" onclick="toggleNewProductForm()">+ Nouveau</button>
+                    <button type="button" class="btn-secondary" onclick="toggleNewProductForm()" style="white-space: nowrap;">➕ Nouveau</button>
                 </div>
             </div>
             
-            <!-- Formulaire nouveau produit (caché) -->
+            <!-- Formulaire nouveau produit (caché par défaut) -->
             <div id="new-product-form" style="display:none; border: 1px solid #ddd; padding: 15px; border-radius: 4px; background: #f9f9f9; margin-bottom: 15px;">
-                <h4>Ajouter un nouveau produit</h4>
+                <h4>Créer un nouveau produit</h4>
                 <div class="form-group">
                     <label>Nom du produit *</label>
-                    <input type="text" name="nouveau_produit_nom" placeholder="ex: Riz">
+                    <input type="text" id="nouveau_produit_nom" placeholder="ex: Riz, Huile, Tôles...">
+                </div>
+                <div class="form-group">
+                    <label>Unité de mesure *</label>
+                    <select id="nouveau_produit_unite">
+                        <option value="kg">Kilogramme (kg)</option>
+                        <option value="litre">Litre</option>
+                        <option value="sac">Sac</option>
+                        <option value="plaque">Plaque</option>
+                        <option value="pièce">Pièce</option>
+                        <option value="m3">Mètre cube (m³)</option>
+                        <option value="unité">Unité</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Prix unitaire (Ar) *</label>
-                    <input type="number" name="nouveau_produit_prix" step="100" min="0" placeholder="ex: 2500">
+                    <input type="number" id="nouveau_produit_prix" step="100" min="0" placeholder="ex: 2500">
                 </div>
+                <button type="button" class="btn-primary" onclick="createNewProduct()">✅ Créer le produit</button>
+                <button type="button" class="btn-secondary" onclick="toggleNewProductForm()">Annuler</button>
             </div>
             
-            <!-- Quantité et Unité -->
+            <!-- Quantité -->
             <div class="form-row">
                 <div class="form-group half stagger-item">
                     <label>Quantité *</label>
-                    <input type="number" name="quantite_produit" step="0.01" min="0.01" placeholder="ex: 100">
+                    <input type="number" name="quantite_produit" step="0.01" min="0.01" placeholder="ex: 100" required>
                 </div>
                 <div class="form-group half stagger-item">
-                    <label>Unité *</label>
-                    <input type="text" name="unite_produit" placeholder="kg, litre, plaques..." readonly>
+                    <label>Unité</label>
+                    <input type="text" name="unite_produit" id="unite_produit" readonly>
                 </div>
             </div>
         </div>
@@ -245,9 +266,6 @@ function updateCategories() {
         argentSection.style.display = 'none';
         produitSection.style.display = 'none';
     }
-    
-    document.getElementById('categorie_id').value = '';
-    document.getElementById('produit_id').innerHTML = '<option value="">-- Sélectionnez un produit --</option>';
 }
 
 // Mettre à jour les produits en fonction de la catégorie
@@ -285,42 +303,88 @@ function toggleNewProductForm() {
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
 }
 
-// Initialiser le formulaire au chargement
-document.addEventListener('DOMContentLoaded', function() {
-    updateCategories();
-});
-
-// Gérer la soumission du formulaire
-document.getElementById('don-form').addEventListener('submit', function(e) {
-    const typeDon = document.getElementById('type_don').value;
+// Créer un nouveau produit via AJAX
+function createNewProduct() {
+    const categorieId = document.getElementById('categorie_id').value;
+    const nom = document.getElementById('nouveau_produit_nom').value;
+    const unite = document.getElementById('nouveau_produit_unite').value;
+    const prix = document.getElementById('nouveau_produit_prix').value;
     
-    if (!typeDon) {
-        e.preventDefault();
-        alert('Veuillez sélectionner un type de don');
+    if (!categorieId) {
+        alert('Veuillez d\'abord sélectionner une catégorie');
         return;
     }
     
-    if (typeDon === 'argent') {
-        const montant = document.querySelector('[name="quantite_argent"]').value;
-        if (!montant || montant <= 0) {
-            e.preventDefault();
-            alert('Veuillez entrer un montant valide');
-        }
-    } else if (typeDon === 'produit') {
-        const produitId = document.getElementById('produit_id').value;
-        const quantite = document.querySelector('[name="quantite_produit"]').value;
-        
-        if (!produitId) {
-            e.preventDefault();
-            alert('Veuillez sélectionner un produit');
-            return;
-        }
-        
-        if (!quantite || quantite <= 0) {
-            e.preventDefault();
-            alert('Veuillez entrer une quantité valide');
-            return;
-        }
+    if (!nom || !unite || !prix) {
+        alert('Veuillez remplir tous les champs');
+        return;
     }
+    
+    // Désactiver le bouton pendant la requête
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Création...';
+    
+    // Appel AJAX pour créer le produit
+    fetch(BASE_URL + '/api/creer-produit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `categorie_id=${categorieId}&nom=${encodeURIComponent(nom)}&unite=${unite}&prix=${prix}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Produit créé avec succès');
+            
+            // Ajouter le produit à la liste
+            const produitSelect = document.getElementById('produit_id');
+            const option = document.createElement('option');
+            option.value = data.produit_id;
+            option.setAttribute('data-unite', unite);
+            option.setAttribute('data-prix', prix);
+            option.textContent = nom + ' (' + unite + ')';
+            produitSelect.appendChild(option);
+            
+            // Sélectionner le nouveau produit
+            produitSelect.value = data.produit_id;
+            
+            // Mettre à jour l'unité
+            document.getElementsByName('unite_produit')[0].value = unite;
+            
+            // Cacher le formulaire
+            document.getElementById('new-product-form').style.display = 'none';
+            
+            // Vider les champs
+            document.getElementById('nouveau_produit_nom').value = '';
+            document.getElementById('nouveau_produit_prix').value = '';
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+        
+        // Réactiver le bouton
+        btn.disabled = false;
+        btn.textContent = '✅ Créer le produit';
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Erreur de communication');
+        btn.disabled = false;
+        btn.textContent = '✅ Créer le produit';
+    });
+}
+
+// Initialiser le formulaire au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    updateCategories();
+    
+    // Gérer le changement de produit
+    document.getElementById('produit_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+            document.getElementsByName('unite_produit')[0].value = selectedOption.getAttribute('data-unite');
+        }
+    });
 });
 </script>
