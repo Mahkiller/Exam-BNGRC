@@ -76,59 +76,79 @@ class DonsController extends Controller {
         $this->view('attribution', $data);
     }
     
+    // MÉTHODE AJOUTER COMPLÈTE
     public function ajouter() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $donateur = $_POST['donateur'];
-            $type_don = $_POST['type_don'];
-            
-            if ($type_don === 'argent') {
-                // Don en argent
-                $quantite = $_POST['quantite_argent'] ?? 0;
-                if ($quantite <= 0) {
-                    $_SESSION['error'] = 'Le montant doit être positif';
+            try {
+                $donateur = $_POST['donateur'];
+                $type_don = $_POST['type_don'];
+                
+                error_log("Tentative d'ajout de don - Type: $type_don, Donateur: $donateur");
+                
+                if ($type_don === 'argent') {
+                    // Don en argent
+                    $quantite = $_POST['quantite_argent'] ?? 0;
+                    if ($quantite <= 0) {
+                        $_SESSION['error'] = 'Le montant doit être positif';
+                        $this->redirect('dons');
+                        return;
+                    }
+                    $description = 'Don en argent';
+                    $unite = 'Ariary';
+                    $produit_id = null;
+                    
+                    $result = $this->donService->ajouterDon($donateur, 'argent', $description, $quantite, $unite, $produit_id);
+                    
+                } else if ($type_don === 'produit') {
+                    // Don en produit
+                    $produit_id = $_POST['produit_id'] ?? null;
+                    $quantite = $_POST['quantite_produit'] ?? 0;
+                    
+                    if ($quantite <= 0) {
+                        $_SESSION['error'] = 'La quantité doit être positive';
+                        $this->redirect('dons');
+                        return;
+                    }
+                    
+                    if (!$produit_id) {
+                        $_SESSION['error'] = 'Veuillez sélectionner un produit';
+                        $this->redirect('dons');
+                        return;
+                    }
+                    
+                    // Récupérer les infos du produit
+                    $produit = $this->donService->getProduitInfo($produit_id);
+                    
+                    if (!$produit) {
+                        $_SESSION['error'] = 'Produit introuvable';
+                        $this->redirect('dons');
+                        return;
+                    }
+                    
+                    $description = $produit['nom_produit'];
+                    $unite = $produit['unite_mesure'];
+                    $type_don_reel = $produit['nom_categorie']; // 'nature' ou 'materiel'
+                    
+                    $result = $this->donService->ajouterDon($donateur, $type_don_reel, $description, $quantite, $unite, $produit_id);
+                    
+                } else {
+                    $_SESSION['error'] = 'Type de don invalide';
                     $this->redirect('dons');
                     return;
                 }
-                $description = 'Don en argent';
-                $unite = 'Ar';
-                $produit_id = null;
                 
-                $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id);
-                
-            } else if ($type_don === 'produit') {
-                // Don en produit
-                $produit_id = $_POST['produit_id'] ?? null;
-                $quantite = $_POST['quantite_produit'] ?? 0;
-                
-                if ($quantite <= 0) {
-                    $_SESSION['error'] = 'La quantité doit être positive';
-                    $this->redirect('dons');
-                    return;
+                if ($result['success']) {
+                    $_SESSION['message'] = '✅ Don enregistré avec succès';
+                    error_log("Don ajouté avec succès - ID: " . ($result['don_id'] ?? 'N/A'));
+                } else {
+                    $_SESSION['error'] = $result['message'];
+                    error_log("Erreur ajout don: " . $result['message']);
                 }
                 
-                // Récupérer les infos du produit
-                $produit = $this->donService->getProduitInfo($produit_id);
-                
-                if (!$produit) {
-                    $_SESSION['error'] = 'Produit introuvable';
-                    $this->redirect('dons');
-                    return;
-                }
-                
-                $description = $produit['nom_produit'];
-                $unite = $produit['unite_mesure'];
-                
-                $result = $this->donService->ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id);
-            } else {
-                $_SESSION['error'] = 'Type de don invalide';
-                $this->redirect('dons');
-                return;
-            }
-            
-            if ($result['success']) {
-                $_SESSION['message'] = 'Don enregistré avec succès';
-            } else {
-                $_SESSION['error'] = $result['message'];
+            } catch (Exception $e) {
+                error_log("Exception dans ajouter(): " . $e->getMessage());
+                error_log("Fichier: " . $e->getFile() . " Ligne: " . $e->getLine());
+                $_SESSION['error'] = 'Erreur: ' . $e->getMessage();
             }
             
             $this->redirect('dons');

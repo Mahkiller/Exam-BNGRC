@@ -25,7 +25,7 @@ CREATE TABLE ville_BNGRC (
     image_path VARCHAR(255) NULL
 );
 
--- 2. Insertion des villes
+-- Insertion des villes
 INSERT INTO ville_BNGRC (nom_ville, region) VALUES
 ('Toamasina', 'Atsinanana'),
 ('Mananjary', 'Vatovavy'),
@@ -64,7 +64,7 @@ CREATE TABLE produit_BNGRC (
     FOREIGN KEY (categorie_id) REFERENCES categorie_produit_BNGRC(id)
 );
 
--- 3. Insertion des produits
+-- Insertion des produits
 INSERT INTO produit_BNGRC (categorie_id, nom_produit, unite_mesure, prix_unitaire_reference, stock_actuel, seuil_alerte) VALUES
 -- Nature (catégorie 1)
 (1, 'Riz', 'kg', 3000, 0, 500),
@@ -83,109 +83,7 @@ INSERT INTO produit_BNGRC (categorie_id, nom_produit, unite_mesure, prix_unitair
 (3, 'Argent', 'Ariary', 1, 0, 0);
 
 -- ============================================
--- 4. TABLE DES BESOINS (CEUX À PROTÉGER)
--- ============================================
-CREATE TABLE besoin_BNGRC (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    ville_id INT NOT NULL,
-    produit_id INT NULL,
-    type_besoin VARCHAR(50) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    quantite_demandee DECIMAL(15,2) NOT NULL,
-    unite VARCHAR(50),
-    niveau_urgence VARCHAR(20) NOT NULL,
-    date_besoin DATETIME DEFAULT CURRENT_TIMESTAMP,
-    a_proteger BOOLEAN DEFAULT FALSE, -- Champ pour marquer les besoins à protéger
-    FOREIGN KEY (ville_id) REFERENCES ville_BNGRC(id),
-    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
-);
-
--- 4. Insertion des besoins (avec a_proteger = TRUE pour ceux du tableau)
-INSERT INTO besoin_BNGRC (ville_id, produit_id, type_besoin, description, quantite_demandee, unite, niveau_urgence, date_besoin, a_proteger) VALUES
--- Toamasina
-(1, 1, 'nature', 'Riz', 800, 'kg', 'urgent', '2026-02-16 00:00:00', TRUE),
-(1, 2, 'nature', 'Eau', 1500, 'L', 'modere', '2026-02-15 00:00:00', TRUE),
-(1, 5, 'materiel', 'Tôle', 120, 'plaque', 'urgent', '2026-02-16 00:00:00', TRUE),
-(1, 6, 'materiel', 'Bâche', 200, 'piece', 'modere', '2026-02-15 00:00:00', TRUE),
-(1, 9, 'materiel', 'Groupe électrogène', 3, 'piece', 'urgent', '2026-02-15 00:00:00', TRUE),
-(1, NULL, 'argent', 'Argent', 12000000, 'Ariary', 'modere', '2026-02-16 00:00:00', TRUE),
-
--- Mananjary
-(2, 1, 'nature', 'Riz', 500, 'kg', 'urgent', '2026-02-15 00:00:00', TRUE),
-(2, 3, 'nature', 'Huile', 120, 'L', 'urgent', '2026-02-16 00:00:00', TRUE),
-(2, 5, 'materiel', 'Tôle', 80, 'plaque', 'modere', '2026-02-15 00:00:00', TRUE),
-(2, 7, 'materiel', 'Clous', 60, 'kg', 'modere', '2026-02-16 00:00:00', TRUE),
-(2, NULL, 'argent', 'Argent', 6000000, 'Ariary', 'faible', '2026-02-15 00:00:00', TRUE),
-
--- Farafangana
-(3, 1, 'nature', 'Riz', 600, 'kg', 'urgent', '2026-02-16 00:00:00', TRUE),
-(3, 2, 'nature', 'Eau', 1000, 'L', 'modere', '2026-02-15 00:00:00', TRUE),
-(3, 6, 'materiel', 'Bâche', 150, 'piece', 'modere', '2026-02-16 00:00:00', TRUE),
-(3, 8, 'materiel', 'Bois', 100, 'piece', 'urgent', '2026-02-15 00:00:00', TRUE),
-(3, NULL, 'argent', 'Argent', 8000000, 'Ariary', 'modere', '2026-02-16 00:00:00', TRUE),
-
--- Nosy Be
-(4, 1, 'nature', 'Riz', 300, 'kg', 'faible', '2026-02-15 00:00:00', TRUE),
-(4, 4, 'nature', 'Haricots', 200, 'kg', 'modere', '2026-02-16 00:00:00', TRUE),
-(4, 5, 'materiel', 'Tôle', 40, 'plaque', 'faible', '2026-02-15 00:00:00', TRUE),
-(4, 7, 'materiel', 'Clous', 30, 'kg', 'faible', '2026-02-16 00:00:00', TRUE),
-(4, NULL, 'argent', 'Argent', 4000000, 'Ariary', 'faible', '2026-02-15 00:00:00', TRUE),
-
--- Morondava
-(5, 1, 'nature', 'Riz', 700, 'kg', 'urgent', '2026-02-16 00:00:00', TRUE),
-(5, 2, 'nature', 'Eau', 1200, 'L', 'modere', '2026-02-15 00:00:00', TRUE),
-(5, 6, 'materiel', 'Bâche', 180, 'piece', 'modere', '2026-02-16 00:00:00', TRUE),
-(5, 8, 'materiel', 'Bois', 150, 'piece', 'urgent', '2026-02-15 00:00:00', TRUE),
-(5, NULL, 'argent', 'Argent', 10000000, 'Ariary', 'urgent', '2026-02-16 00:00:00', TRUE);
-
--- ============================================
--- 5. TABLE DES DONS
--- ============================================
-CREATE TABLE don_BNGRC (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    donateur VARCHAR(200) NOT NULL,
-    type_don VARCHAR(50) NOT NULL,
-    produit_id INT NULL,
-    description VARCHAR(255) NOT NULL,
-    quantite_totale DECIMAL(15,2) NOT NULL,
-    unite VARCHAR(50),
-    date_don DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
-);
-
--- 5. Insertion des dons (pour avoir du stock)
-INSERT INTO don_BNGRC (donateur, type_don, produit_id, description, quantite_totale, unite, date_don) VALUES
--- Dons en nature
-('Croix-Rouge', 'nature', 1, 'Riz', 5000, 'kg', '2026-02-10 10:00:00'),
-('UNICEF', 'nature', 2, 'Eau', 10000, 'L', '2026-02-11 11:00:00'),
-('PNUD', 'nature', 3, 'Huile', 2000, 'L', '2026-02-12 12:00:00'),
-('ONG Miarakapa', 'nature', 4, 'Haricots', 1000, 'kg', '2026-02-13 13:00:00'),
-
--- Dons en matériel
-('Banque Mondiale', 'materiel', 5, 'Tôles', 500, 'plaque', '2026-02-14 14:00:00'),
-('UE', 'materiel', 6, 'Bâches', 800, 'piece', '2026-02-15 15:00:00'),
-('JICA', 'materiel', 7, 'Clous', 1000, 'kg', '2026-02-16 16:00:00'),
-('USAID', 'materiel', 8, 'Bois', 500, 'piece', '2026-02-17 17:00:00'),
-('Coopération Suisse', 'materiel', 9, 'Groupes électrogènes', 10, 'piece', '2026-02-18 18:00:00'),
-
--- Dons en argent
-('Banque Mondiale', 'argent', NULL, 'Fonds d\'urgence', 50000000, 'Ariary', '2026-02-19 19:00:00');
-
--- ============================================
--- 6. TABLE DES ATTRIBUTIONS
--- ============================================
-CREATE TABLE attribution_BNGRC (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    besoin_id INT NOT NULL,
-    don_id INT NOT NULL,
-    quantite_attribuee DECIMAL(15,2) NOT NULL,
-    date_attribution DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (besoin_id) REFERENCES besoin_BNGRC(id),
-    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id)
-);
-
--- ============================================
--- 7. TABLE DES PRIX UNITAIRES
+-- 4. TABLE DES PRIX UNITAIRES
 -- ============================================
 CREATE TABLE prix_unitaire_BNGRC (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -200,6 +98,114 @@ INSERT INTO prix_unitaire_BNGRC (produit_id, prix_unitaire)
 SELECT id, prix_unitaire_reference FROM produit_BNGRC WHERE prix_unitaire_reference IS NOT NULL;
 
 -- ============================================
+-- 5. TABLE DES BESOINS (ceux du tableau précédent)
+-- ============================================
+CREATE TABLE besoin_BNGRC (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    ville_id INT NOT NULL,
+    produit_id INT NULL,
+    type_besoin VARCHAR(50) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    quantite_demandee DECIMAL(15,2) NOT NULL,
+    unite VARCHAR(50),
+    niveau_urgence VARCHAR(20) NOT NULL,
+    date_besoin DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ville_id) REFERENCES ville_BNGRC(id),
+    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
+);
+
+-- Insertion des besoins
+INSERT INTO besoin_BNGRC (ville_id, produit_id, type_besoin, description, quantite_demandee, unite, niveau_urgence, date_besoin) VALUES
+-- Toamasina
+(1, 1, 'nature', 'Riz', 800, 'kg', 'urgent', '2026-02-16 00:00:00'),
+(1, 2, 'nature', 'Eau', 1500, 'L', 'modere', '2026-02-15 00:00:00'),
+(1, 5, 'materiel', 'Tôle', 120, 'plaque', 'urgent', '2026-02-16 00:00:00'),
+(1, 6, 'materiel', 'Bâche', 200, 'piece', 'modere', '2026-02-15 00:00:00'),
+(1, 9, 'materiel', 'Groupe électrogène', 3, 'piece', 'urgent', '2026-02-15 00:00:00'),
+(1, NULL, 'argent', 'Argent', 12000000, 'Ariary', 'modere', '2026-02-16 00:00:00'),
+
+-- Mananjary
+(2, 1, 'nature', 'Riz', 500, 'kg', 'urgent', '2026-02-15 00:00:00'),
+(2, 3, 'nature', 'Huile', 120, 'L', 'urgent', '2026-02-16 00:00:00'),
+(2, 5, 'materiel', 'Tôle', 80, 'plaque', 'modere', '2026-02-15 00:00:00'),
+(2, 7, 'materiel', 'Clous', 60, 'kg', 'modere', '2026-02-16 00:00:00'),
+(2, NULL, 'argent', 'Argent', 6000000, 'Ariary', 'faible', '2026-02-15 00:00:00'),
+
+-- Farafangana
+(3, 1, 'nature', 'Riz', 600, 'kg', 'urgent', '2026-02-16 00:00:00'),
+(3, 2, 'nature', 'Eau', 1000, 'L', 'modere', '2026-02-15 00:00:00'),
+(3, 6, 'materiel', 'Bâche', 150, 'piece', 'modere', '2026-02-16 00:00:00'),
+(3, 8, 'materiel', 'Bois', 100, 'piece', 'urgent', '2026-02-15 00:00:00'),
+(3, NULL, 'argent', 'Argent', 8000000, 'Ariary', 'modere', '2026-02-16 00:00:00'),
+
+-- Nosy Be
+(4, 1, 'nature', 'Riz', 300, 'kg', 'faible', '2026-02-15 00:00:00'),
+(4, 4, 'nature', 'Haricots', 200, 'kg', 'modere', '2026-02-16 00:00:00'),
+(4, 5, 'materiel', 'Tôle', 40, 'plaque', 'faible', '2026-02-15 00:00:00'),
+(4, 7, 'materiel', 'Clous', 30, 'kg', 'faible', '2026-02-16 00:00:00'),
+(4, NULL, 'argent', 'Argent', 4000000, 'Ariary', 'faible', '2026-02-15 00:00:00'),
+
+-- Morondava
+(5, 1, 'nature', 'Riz', 700, 'kg', 'urgent', '2026-02-16 00:00:00'),
+(5, 2, 'nature', 'Eau', 1200, 'L', 'modere', '2026-02-15 00:00:00'),
+(5, 6, 'materiel', 'Bâche', 180, 'piece', 'modere', '2026-02-16 00:00:00'),
+(5, 8, 'materiel', 'Bois', 150, 'piece', 'urgent', '2026-02-15 00:00:00'),
+(5, NULL, 'argent', 'Argent', 10000000, 'Ariary', 'urgent', '2026-02-16 00:00:00');
+
+-- ============================================
+-- 6. TABLE DES DONS (avec champ protege)
+-- ============================================
+CREATE TABLE don_BNGRC (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    donateur VARCHAR(200) NOT NULL,
+    type_don VARCHAR(50) NOT NULL,
+    produit_id INT NULL,
+    description VARCHAR(255) NOT NULL,
+    quantite_totale DECIMAL(15,2) NOT NULL,
+    unite VARCHAR(50),
+    date_don DATETIME DEFAULT CURRENT_TIMESTAMP,
+    protege BOOLEAN DEFAULT FALSE, -- TRUE pour les dons de base
+    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id) ON DELETE SET NULL
+);
+
+-- Insertion des dons de base (avec protege = TRUE)
+INSERT INTO don_BNGRC (donateur, type_don, produit_id, description, quantite_totale, unite, date_don, protege) VALUES
+-- Dons en argent
+('Donateur 1', 'argent', NULL, 'Argent', 5000000, 'Ariary', '2026-02-16 00:00:00', TRUE),
+('Donateur 2', 'argent', NULL, 'Argent', 3000000, 'Ariary', '2026-02-16 00:00:00', TRUE),
+('Donateur 3', 'argent', NULL, 'Argent', 4000000, 'Ariary', '2026-02-17 00:00:00', TRUE),
+('Donateur 4', 'argent', NULL, 'Argent', 1500000, 'Ariary', '2026-02-17 00:00:00', TRUE),
+('Donateur 5', 'argent', NULL, 'Argent', 6000000, 'Ariary', '2026-02-17 00:00:00', TRUE),
+('Donateur 6', 'argent', NULL, 'Argent', 20000000, 'Ariary', '2026-02-19 00:00:00', TRUE),
+
+-- Dons en nature
+('Donateur 7', 'nature', 1, 'Riz', 400, 'kg', '2026-02-16 00:00:00', TRUE),
+('Donateur 8', 'nature', 2, 'Eau', 600, 'L', '2026-02-16 00:00:00', TRUE),
+('Donateur 9', 'nature', 4, 'Haricots', 100, 'kg', '2026-02-17 00:00:00', TRUE),
+('Donateur 10', 'nature', 1, 'Riz', 2000, 'kg', '2026-02-18 00:00:00', TRUE),
+('Donateur 11', 'nature', 2, 'Eau', 5000, 'L', '2026-02-18 00:00:00', TRUE),
+('Donateur 12', 'nature', 4, 'Haricots', 88, 'kg', '2026-02-17 00:00:00', TRUE),
+
+-- Dons en matériel
+('Donateur 13', 'materiel', 5, 'Tôle', 50, 'plaque', '2026-02-17 00:00:00', TRUE),
+('Donateur 14', 'materiel', 6, 'Bâche', 70, 'piece', '2026-02-17 00:00:00', TRUE),
+('Donateur 15', 'materiel', 5, 'Tôle', 300, 'plaque', '2026-02-18 00:00:00', TRUE),
+('Donateur 16', 'materiel', 6, 'Bâche', 500, 'piece', '2026-02-19 00:00:00', TRUE);
+
+-- ============================================
+-- 7. TABLE DES ATTRIBUTIONS
+-- ============================================
+CREATE TABLE attribution_BNGRC (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    besoin_id INT NOT NULL,
+    don_id INT NOT NULL,
+    quantite_attribuee DECIMAL(15,2) NOT NULL,
+    date_attribution DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (besoin_id) REFERENCES besoin_BNGRC(id) ON DELETE CASCADE,
+    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id) ON DELETE CASCADE
+);
+
+-- ============================================
 -- 8. TABLE DES ACHATS
 -- ============================================
 CREATE TABLE achat_BNGRC (
@@ -211,9 +217,9 @@ CREATE TABLE achat_BNGRC (
     prix_unitaire_achat DECIMAL(15,2) NOT NULL,
     montant_total DECIMAL(15,2) NOT NULL,
     date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id),
-    FOREIGN KEY (besoin_id) REFERENCES besoin_BNGRC(id),
-    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
+    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id) ON DELETE CASCADE,
+    FOREIGN KEY (besoin_id) REFERENCES besoin_BNGRC(id) ON DELETE CASCADE,
+    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id) ON DELETE CASCADE
 );
 
 -- ============================================
@@ -230,8 +236,8 @@ CREATE TABLE vente_BNGRC (
     date_vente DATETIME DEFAULT CURRENT_TIMESTAMP,
     acheteur VARCHAR(255),
     notes TEXT,
-    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id),
-    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
+    FOREIGN KEY (don_id) REFERENCES don_BNGRC(id) ON DELETE SET NULL,
+    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id) ON DELETE CASCADE
 );
 
 -- ============================================
@@ -246,7 +252,7 @@ CREATE TABLE mouvement_stock_BNGRC (
     source_id INT NOT NULL,
     date_mouvement DATETIME DEFAULT CURRENT_TIMESTAMP,
     notes TEXT,
-    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id)
+    FOREIGN KEY (produit_id) REFERENCES produit_BNGRC(id) ON DELETE CASCADE
 );
 
 -- ============================================
@@ -266,14 +272,20 @@ INSERT INTO configuration_BNGRC (param_key, param_value, description) VALUES
 ('frais_vente', '0', 'Frais administratifs sur les ventes (en %)'),
 ('tva_vente', '0', 'TVA applicable sur les ventes (en %)');
 
--- Mettre à jour le stock initial avec les dons
-UPDATE produit_BNGRC SET stock_actuel = 5000 WHERE nom_produit = 'Riz';
-UPDATE produit_BNGRC SET stock_actuel = 10000 WHERE nom_produit = 'Eau';
-UPDATE produit_BNGRC SET stock_actuel = 2000 WHERE nom_produit = 'Huile';
-UPDATE produit_BNGRC SET stock_actuel = 1000 WHERE nom_produit = 'Haricots';
-UPDATE produit_BNGRC SET stock_actuel = 500 WHERE nom_produit = 'Tôle';
-UPDATE produit_BNGRC SET stock_actuel = 800 WHERE nom_produit = 'Bâche';
-UPDATE produit_BNGRC SET stock_actuel = 1000 WHERE nom_produit = 'Clous';
-UPDATE produit_BNGRC SET stock_actuel = 500 WHERE nom_produit = 'Bois';
-UPDATE produit_BNGRC SET stock_actuel = 10 WHERE nom_produit = 'Groupe électrogène';
-UPDATE produit_BNGRC SET stock_actuel = 50000000 WHERE nom_produit = 'Argent';
+-- ============================================
+-- 12. MISE À JOUR DES STOCKS
+-- ============================================
+UPDATE produit_BNGRC SET stock_actuel = 5000 WHERE id = 1; -- Riz
+UPDATE produit_BNGRC SET stock_actuel = 10000 WHERE id = 2; -- Eau
+UPDATE produit_BNGRC SET stock_actuel = 2000 WHERE id = 3; -- Huile
+UPDATE produit_BNGRC SET stock_actuel = 1000 WHERE id = 4; -- Haricots
+UPDATE produit_BNGRC SET stock_actuel = 500 WHERE id = 5; -- Tôle
+UPDATE produit_BNGRC SET stock_actuel = 800 WHERE id = 6; -- Bâche
+UPDATE produit_BNGRC SET stock_actuel = 1000 WHERE id = 7; -- Clous
+UPDATE produit_BNGRC SET stock_actuel = 500 WHERE id = 8; -- Bois
+UPDATE produit_BNGRC SET stock_actuel = 10 WHERE id = 9; -- Groupe électrogène
+
+-- Mettre à jour le stock d'argent à partir des dons
+UPDATE produit_BNGRC SET stock_actuel = (
+    SELECT SUM(quantite_totale) FROM don_BNGRC WHERE type_don = 'argent'
+) WHERE nom_produit = 'Argent';

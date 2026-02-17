@@ -50,7 +50,8 @@ class DonService {
         return $this->donModel->getTopDonateurs($limit);
     }
     
-    public function ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id = null) {
+public function ajouterDon($donateur, $type_don, $description, $quantite, $unite, $produit_id = null) {
+    try {
         if (empty($donateur) || empty($type_don) || empty($description) || $quantite <= 0 || empty($unite)) {
             return [
                 'success' => false,
@@ -58,13 +59,28 @@ class DonService {
             ];
         }
         
-        $result = $this->donModel->create($donateur, $type_don, $description, $quantite, $unite, $produit_id);
+        $don_id = $this->donModel->create($donateur, $type_don, $description, $quantite, $unite, $produit_id);
         
+        if ($don_id) {
+            return [
+                'success' => true,
+                'message' => 'Don enregistré avec succès',
+                'don_id' => $don_id
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Erreur lors de l\'enregistrement dans la base de données'
+            ];
+        }
+    } catch (Exception $e) {
+        error_log("Exception dans ajouterDon: " . $e->getMessage());
         return [
-            'success' => $result,
-            'message' => $result ? 'Don enregistré avec succès' : 'Erreur lors de l\'enregistrement'
+            'success' => false,
+            'message' => 'Erreur: ' . $e->getMessage()
         ];
     }
+}
     
     public function attribuerDon($besoin_id, $don_id, $quantite, $type = null) {
         // Si don_id n'est pas fourni, chercher un don disponible du même type
