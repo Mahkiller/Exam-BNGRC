@@ -134,6 +134,32 @@ Flight::route('/stock', function () {
     return $controller->index();
 });
 
+// Routes Ventes
+Flight::route('/ventes', function () {
+    $controller = new VenteController();
+    return $controller->index();
+});
+
+Flight::route('/ventes/vendre', function () {
+    $controller = new VenteController();
+    return $controller->vendre();
+});
+
+Flight::route('/ventes/config', function () {
+    $controller = new VenteController();
+    return $controller->config();
+});
+
+Flight::route('/ventes/update-config', function () {
+    $controller = new VenteController();
+    return $controller->updateConfig();
+});
+
+Flight::route('/ventes/check-product', function () {
+    $controller = new VenteController();
+    return $controller->checkProduct();
+});
+
 // 404 Handler
 Flight::map('notFound', function() {
     http_response_code(404);

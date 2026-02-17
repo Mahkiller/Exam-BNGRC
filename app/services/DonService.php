@@ -38,6 +38,10 @@ class DonService {
         return $this->donModel->getDonsNonUtilises();
     }
     
+    public function getDonsNonUtilises() {
+        return $this->donModel->getDonsNonUtilises();
+    }
+    
     public function getStatsDonateurs() {
         return $this->donModel->getStatsParTypeDonateur();
     }

@@ -56,4 +56,15 @@ class ServiceContainer {
         }
         return self::$instances['achat'];
     }
+    
+    public static function getVenteService() {
+        if (!isset(self::$instances['vente'])) {
+            $venteModel = new VenteModel();
+            self::$instances['vente'] = new VenteService(
+                $venteModel,
+                self::getValidationService()
+            );
+        }
+        return self::$instances['vente'];
+    }
 }

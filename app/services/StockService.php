@@ -2,10 +2,12 @@
 class StockService {
     private $donModel;
     private $besoinModel;
+    private $venteModel;
     
     public function __construct($donModel, $besoinModel) {
         $this->donModel = $donModel;
         $this->besoinModel = $besoinModel;
+        $this->venteModel = new VenteModel();
     }
     
     // Vérifier si assez de stock
@@ -14,7 +16,7 @@ class StockService {
         return $stockActuel >= $quantiteDemandee;
     }
     
-    // Calculer stock restant par type - CORRIGÉ
+    // Calculer stock restant par type
     public function getStockRestant($type) {
         $totalDons = $this->donModel->getStockTotal($type);
         $totalAttribue = $this->besoinModel->getTotalAttribue($type);
@@ -24,11 +26,17 @@ class StockService {
             return $totalDons - $totalAttribue;
         }
         
-        // Pour l'argent, soustraire aussi les achats
+        // Pour l'argent, soustraire aussi les achats ET AJOUTER les ventes
         $db = Database::getInstance();
-        $stmt = $db->query("SELECT SUM(montant_total) as total FROM achat_BNGRC");
+        
+        // Total des achats (dépenses)
+        $stmt = $db->query("SELECT COALESCE(SUM(montant_total), 0) as total FROM achat_BNGRC");
         $totalAchats = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
-        return $totalDons - $totalAttribue - $totalAchats;
+        
+        // Total des ventes (revenus)
+        $totalVentes = $this->venteModel->getTotalVentes();
+        
+        return $totalDons - $totalAttribue - $totalAchats + $totalVentes;
     }
     
     // Stock global par type
@@ -41,7 +49,7 @@ class StockService {
         return $stock;
     }
     
-    // Stock détaillé par article - CORRIGÉ pour inclure les achats
+    // Stock détaillé par article
     public function getStockDetaille() {
         $dons = $this->donModel->getAll();
         $stock = [];
@@ -49,7 +57,7 @@ class StockService {
         foreach ($dons as $don) {
             // Calculer ce qui a déjà été attribué pour ce don
             $stmt = Database::getInstance()->prepare("
-                SELECT SUM(quantite_attribuee) as total 
+                SELECT COALESCE(SUM(quantite_attribuee), 0) as total 
                 FROM attribution_BNGRC 
                 WHERE don_id = ?
             ");
