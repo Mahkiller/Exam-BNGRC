@@ -4,7 +4,7 @@ class Database {
     private $connection;
     
     private $host = 'localhost';
-    private $dbname = 'BNGRC';  // Nom de ta base (en majuscule)
+    private $dbname = 'ETU004082_4338_4433';  // Nom de ta base (en majuscule)
     private $username = 'root';
     private $password = '';
     

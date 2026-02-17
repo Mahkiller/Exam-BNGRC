@@ -1,6 +1,6 @@
 -- Création de la base de données
-CREATE DATABASE IF NOT EXISTS BNGRC;
-USE BNGRC;
+CREATE DATABASE IF NOT EXISTS ETU004082_4338_4433;
+USE ETU004082_4338_4433;
 
 -- Supprimer toutes les tables (dans l'ordre à cause des clés étrangères)
 DROP TABLE IF EXISTS mouvement_stock_BNGRC;
